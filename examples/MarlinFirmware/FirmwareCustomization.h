@@ -17,13 +17,13 @@
     or, you could define it here *
  */
 
-#if 0
+//#if 0
 
   // You can obtain a unique id by visiting https://www.uuidgenerator.net/version4
 
-  #define  SPECIFIC_PRINTER_ID e9cbe275
+  //#define  SPECIFIC_PRINTER_ID a4jp
 
-#endif
+//#endif
 
 /*
  *

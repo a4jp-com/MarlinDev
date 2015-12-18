@@ -2,6 +2,9 @@
 // tested on 2015-05-19 by @Wackerbarth
 // using Arduino 1.6.5 (Mac)
 
+// FEATURES
+#define AUTO_BED_LEVELING_FEATURE
+
 // Based on the 1.1 MOTHERBOARD descriptors
 #define MOTHERBOARD BOARD_BRAINWAVE_PRO
 
@@ -68,7 +71,7 @@
 #define INVERT_E0_DIR true
 
 //===========================================================================
-//============================ Bed Leveling =================================
+//========================== Bed Tilt Compensation ==========================
 //===========================================================================
 
 #ifndef DELTA_PROBABLE_RADIUS
@@ -109,20 +112,26 @@
 #define Z_PROBE_ALLEN_KEY_DEPLOY_1_FEEDRATE HOMING_FEEDRATE_XYZ
 #define Z_PROBE_ALLEN_KEY_DEPLOY_2_X -110.00 // Move outward to position deploy pin to the left of the arm
 #define Z_PROBE_ALLEN_KEY_DEPLOY_2_Y -125.00
-#define Z_PROBE_ALLEN_KEY_DEPLOY_2_Z 100.0
+#define Z_PROBE_ALLEN_KEY_DEPLOY_2_Z Z_PROBE_ALLEN_KEY_DEPLOY_1_Z
 #define Z_PROBE_ALLEN_KEY_DEPLOY_2_FEEDRATE HOMING_FEEDRATE_XYZ
 #define Z_PROBE_ALLEN_KEY_DEPLOY_3_X 45.00 // Move right to trigger deploy pin
-#define Z_PROBE_ALLEN_KEY_DEPLOY_3_Y -125.00
-#define Z_PROBE_ALLEN_KEY_DEPLOY_3_Z 100.0
+#define Z_PROBE_ALLEN_KEY_DEPLOY_3_Y Z_PROBE_ALLEN_KEY_DEPLOY_2_Y
+#define Z_PROBE_ALLEN_KEY_DEPLOY_3_Z Z_PROBE_ALLEN_KEY_DEPLOY_2_Z
 #define Z_PROBE_ALLEN_KEY_DEPLOY_3_FEEDRATE (HOMING_FEEDRATE_XYZ/2)
 
-#define Z_PROBE_ALLEN_KEY_STOW_1_X 36.00 // Line up with bed retaining clip
-#define Z_PROBE_ALLEN_KEY_STOW_1_Y -122.00
+#ifndef Z_PROBE_ALLEN_KEY_STOW_1_X
+  #define Z_PROBE_ALLEN_KEY_STOW_1_X 36.00 // Line up with bed retaining clip
+#endif
+#ifndef Z_PROBE_ALLEN_KEY_STOW_1_Y
+  #define Z_PROBE_ALLEN_KEY_STOW_1_Y -125.00
+#endif
 #define Z_PROBE_ALLEN_KEY_STOW_1_Z 75.0
 #define Z_PROBE_ALLEN_KEY_STOW_1_FEEDRATE HOMING_FEEDRATE_XYZ
-#define Z_PROBE_ALLEN_KEY_STOW_2_X 36.00 // move down to retract probe
-#define Z_PROBE_ALLEN_KEY_STOW_2_Y -122.00
-#define Z_PROBE_ALLEN_KEY_STOW_2_Z 25.0
+#define Z_PROBE_ALLEN_KEY_STOW_2_X Z_PROBE_ALLEN_KEY_STOW_1_X // move down to retract probe
+#define Z_PROBE_ALLEN_KEY_STOW_2_Y Z_PROBE_ALLEN_KEY_STOW_1_Y
+#ifndef Z_PROBE_ALLEN_KEY_STOW_2_Z
+  #define Z_PROBE_ALLEN_KEY_STOW_2_Z 0.0
+#endif
 #define Z_PROBE_ALLEN_KEY_STOW_2_FEEDRATE (HOMING_FEEDRATE_XYZ/2)
 #define Z_PROBE_ALLEN_KEY_STOW_3_X 0.0  // return to 0,0,100
 #define Z_PROBE_ALLEN_KEY_STOW_3_Y 0.0

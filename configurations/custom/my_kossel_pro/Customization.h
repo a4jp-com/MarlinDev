@@ -11,6 +11,7 @@
 #define  DELTA_PROBABLE_RADIUS (DELTA_PRINTABLE_RADIUS+X_PROBE_OFFSET_FROM_EXTRUDER)
 
 // probe at the points of a lattice grid
+#define  AUTO_BED_LEVELING_FEATURE
 #define  AUTO_BED_LEVELING_GRID_X ((RIGHT_PROBE_BED_POSITION - LEFT_PROBE_BED_POSITION) / (AUTO_BED_LEVELING_GRID_POINTS - 1))
 #define  AUTO_BED_LEVELING_GRID_Y ((BACK_PROBE_BED_POSITION - FRONT_PROBE_BED_POSITION) / (AUTO_BED_LEVELING_GRID_POINTS - 1))
 #define  Z_PROBE_OFFSET_FROM_EXTRUDER -17.10  // Increase this if the first layer is too thin (remember: it's a negative number so increase means closer to zero).
