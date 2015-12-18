@@ -5,10 +5,10 @@
 #ifndef PINS_H
 #define PINS_H
 
-#elif MB(A4JP)
-  #include "pins_A4JP.h"
 #if MB(GEN7_CUSTOM)
   #include "pins_GEN7_CUSTOM.h"
+#elif MB(A4JP)
+  #include "pins_A4JP.h"
 #elif MB(GEN7_12)
   #include "pins_GEN7_12.h"
 #elif MB(GEN7_13)
