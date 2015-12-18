@@ -1,4 +1,3 @@
-//hi
 #ifndef BOARDS_H
 #define BOARDS_H
 
