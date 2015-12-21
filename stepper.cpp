@@ -22,17 +22,18 @@
 /* The timer calculations of this module informed by the 'RepRap cartesian firmware' by Zack Smith
    and Philipp Tiefenbacher. */
 
-#include "Marlin.h"
+#include "MarlinFirmware.h"
 #include "stepper.h"
 #include "planner.h"
 #include "temperature.h"
 #include "ultralcd.h"
-#include "language.h"
+#include "messages/language.h"
 #include "cardreader.h"
 #include "speed_lookuptable.h"
 #if HAS_DIGIPOTSS
   #include <SPI.h>
 #endif
+#include "host_interface/host_io.h"
 
 //===========================================================================
 //============================= public variables ============================

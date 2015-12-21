@@ -21,7 +21,7 @@
 
 #ifndef MarlinSerial_h
 #define MarlinSerial_h
-#include "Marlin.h"
+#include "MarlinFirmware.h"
 
 #ifndef SERIAL_PORT
   #define SERIAL_PORT 0

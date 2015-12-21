@@ -18,15 +18,16 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Marlin.h"
 #include "ultralcd.h"
 #include "temperature.h"
-#include "language.h"
+#include "messages/language.h"
 #include "Sd2PinMap.h"
 
 #if ENABLED(USE_WATCHDOG)
   #include "watchdog.h"
 #endif
+
+#include "host_interface/host_io.h"
 
 //===========================================================================
 //================================== macros =================================
@@ -1115,7 +1116,7 @@ void disable_all_heaters() {
     WRITE_HEATER_ ## NR (LOW); \
   }
 
-  #if HAS_TEMP_0
+  #if HAS_TEMP_0 || ENABLED(HEATER_0_USES_MAX6675)
     target_temperature[0] = 0;
     soft_pwm[0] = 0;
     WRITE_HEATER_0P(LOW); // Should HEATERS_PARALLEL apply here? Then change to DISABLE_HEATER(0)

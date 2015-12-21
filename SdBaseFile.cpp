@@ -18,10 +18,10 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include "Marlin.h"
-#if ENABLED(SDSUPPORT)
-
 #include "SdBaseFile.h"
+#if ENABLED(SDSUPPORT)
+#include "host_interface/host_io.h"
+
 //------------------------------------------------------------------------------
 // pointer to cwd directory
 SdBaseFile* SdBaseFile::cwd_ = 0;

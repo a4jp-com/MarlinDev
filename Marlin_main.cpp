@@ -27,7 +27,7 @@
  *  - http://reprap.org/pipermail/reprap-dev/2011-May/003323.html
  */
 
-#include "Marlin.h"
+#include "MarlinFirmware.h"
 
 #if ENABLED(AUTO_BED_LEVELING_FEATURE)
   #include "vector_3.h"
@@ -46,7 +46,7 @@
 #include "temperature.h"
 #include "cardreader.h"
 #include "configuration_store.h"
-#include "language.h"
+#include "messages/language.h"
 #include "pins_arduino.h"
 #include "math.h"
 #include "buzzer.h"
@@ -67,6 +67,10 @@
 #if HAS_DIGIPOTSS
   #include <SPI.h>
 #endif
+
+#include "gCodes/gCodes.h"
+#include "banner.h"
+#include "host_interface/host_io.h"
 
 /**
  * Look here for descriptions of G-codes:
@@ -228,10 +232,6 @@
  * T0-T3 - Select a tool by index (usually an extruder) [ F<mm/min> ]
  *
  */
-
-#if ENABLED(M100_FREE_MEMORY_WATCHER)
-  void gcode_M100();
-#endif
 
 #if ENABLED(SDSUPPORT)
   CardReader card;
@@ -446,26 +446,6 @@ void serial_echopair_P(const char* s_P, unsigned long v) { serialprintPGM(s_P); 
   float extrude_min_temp = EXTRUDE_MINTEMP;
 #endif
 
-#if ENABLED(SDSUPPORT)
-  #include "SdFatUtil.h"
-  int freeMemory() { return SdFatUtil::FreeRam(); }
-#else
-extern "C" {
-  extern unsigned int __bss_end;
-  extern unsigned int __heap_start;
-  extern void* __brkval;
-
-  int freeMemory() {
-    int free_memory;
-    if ((int)__brkval == 0)
-      free_memory = ((int)&free_memory) - ((int)&__bss_end);
-    else
-      free_memory = ((int)&free_memory) - ((int)__brkval);
-    return free_memory;
-  }
-}
-#endif //!SDSUPPORT
-
 /**
  * Inject the next command from the command queue, when possible
  * Return false only if no command was pending
@@ -651,26 +631,7 @@ void setup() {
   if (mcu & 32) SERIAL_ECHOLNPGM(MSG_SOFTWARE_RESET);
   MCUSR = 0;
 
-  SERIAL_ECHOPGM(MSG_MARLIN);
-  SERIAL_ECHOLNPGM(" " SHORT_BUILD_VERSION);
-
-  #ifdef STRING_DISTRIBUTION_DATE
-    #ifdef STRING_CONFIG_H_AUTHOR
-      SERIAL_ECHO_START;
-      SERIAL_ECHOPGM(MSG_CONFIGURATION_VER);
-      SERIAL_ECHOPGM(STRING_DISTRIBUTION_DATE);
-      SERIAL_ECHOPGM(MSG_AUTHOR);
-      SERIAL_ECHOLNPGM(STRING_CONFIG_H_AUTHOR);
-      SERIAL_ECHOPGM("Compiled: ");
-      SERIAL_ECHOLNPGM(__DATE__);
-    #endif // STRING_CONFIG_H_AUTHOR
-  #endif // STRING_DISTRIBUTION_DATE
-
-  SERIAL_ECHO_START;
-  SERIAL_ECHOPGM(MSG_FREE_MEMORY);
-  SERIAL_ECHO(freeMemory());
-  SERIAL_ECHOPGM(MSG_PLANNER_BUFFER_BYTES);
-  SERIAL_ECHOLN((int)sizeof(block_t)*BLOCK_BUFFER_SIZE);
+  show_banner_details();
 
   #if ENABLED(SDSUPPORT)
     for (int8_t i = 0; i < BUFSIZE; i++) fromsd[i] = false;
@@ -2703,7 +2664,7 @@ inline void gcode_G28() {
         if (code_seen('X')) {
           ix = code_value_long() - 1;
           if (ix < 0 || ix >= MESH_NUM_X_POINTS) {
-            SERIAL_PROTOCOLPGM("X out of range (1-" STRINGIFY(MESH_NUM_X_POINTS) ").\n");
+            SERIAL_PROTOCOLPGM("X out of range (1-" AS_QUOTED_STRING(MESH_NUM_X_POINTS) ").\n");
             return;
           }
         }
@@ -2714,7 +2675,7 @@ inline void gcode_G28() {
         if (code_seen('Y')) {
           iy = code_value_long() - 1;
           if (iy < 0 || iy >= MESH_NUM_Y_POINTS) {
-            SERIAL_PROTOCOLPGM("Y out of range (1-" STRINGIFY(MESH_NUM_Y_POINTS) ").\n");
+            SERIAL_PROTOCOLPGM("Y out of range (1-" AS_QUOTED_STRING(MESH_NUM_Y_POINTS) ").\n");
             return;
           }
         }
@@ -4311,13 +4272,6 @@ inline void gcode_M114() {
     SERIAL_PROTOCOL((delta[Y_AXIS] - delta[X_AXIS]) / 90 * axis_steps_per_unit[Y_AXIS]);
     SERIAL_EOL; SERIAL_EOL;
   #endif
-}
-
-/**
- * M115: Capabilities string
- */
-inline void gcode_M115() {
-  SERIAL_PROTOCOLPGM(MSG_M115_REPORT);
 }
 
 /**

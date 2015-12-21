@@ -12,19 +12,24 @@
 
 #define X_STEP_PIN 25
 #define X_DIR_PIN 23
-#define X_MIN_PIN 22
+//#define X_MIN_PIN 22
+#define X_MIN_PIN -1		// These two changes by Roxy
 #define X_MAX_PIN 24
 #define X_ENABLE_PIN 27
 
 #define Y_STEP_PIN 31
 #define Y_DIR_PIN 33
-#define Y_MIN_PIN 26
+//#define Y_MIN_PIN 26
+#define Y_MIN_PIN -1		// These two changes by Roxy
 #define Y_MAX_PIN 28
 #define Y_ENABLE_PIN 29
 
 #define Z_STEP_PIN 37
 #define Z_DIR_PIN 39
-#define Z_MIN_PIN 30
+#define Z_MIN_PROBE_PIN 30	// Changed by Roxy
+//#define Z_MIN_PIN 30		// Changed by Roxy
+#define Z_MIN_PIN -1		// Changed by Roxy
+
 #define Z_MAX_PIN 32
 #define Z_ENABLE_PIN 35
 

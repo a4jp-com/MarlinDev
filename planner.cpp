@@ -48,12 +48,12 @@
  *
  */
 
-#include "Marlin.h"
 #include "planner.h"
 #include "stepper.h"
 #include "temperature.h"
 #include "ultralcd.h"
-#include "language.h"
+#include "host_interface/host_io.h"
+#include "messages/language.h"
 
 #if ENABLED(MESH_BED_LEVELING)
   #include "mesh_bed_leveling.h"
