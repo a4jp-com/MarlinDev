@@ -1,5 +1,5 @@
 /************************************************
- * Rambo pin assignments
+ * Rambo pin assignments from pins_RAMBO
  ************************************************/
 
 #ifndef __AVR_ATmega2560__
@@ -37,25 +37,7 @@
 
 #endif // ULTRA_LCD */
 
-#if ENABLED(VIKI2) || ENABLED(miniVIKI)
-  #define BEEPER_PIN 44
-  // Pins for DOGM SPI LCD Support
-  #define DOGLCD_A0  70
-  #define DOGLCD_CS  71
-  #define LCD_SCREEN_ROT_180
 
-  #define SD_DETECT_PIN -1 // Pin 72 if using easy adapter board
-
-  #if ENABLED(TEMP_STAT_LEDS)
-    #define STAT_LED_RED      22
-    #define STAT_LED_BLUE     32
-  #endif
-#endif // VIKI2/miniVIKI
-
-#if ENABLED(FILAMENT_SENSOR)
-  //Filip added pin for Filament sensor analog input
-  #define FILWIDTH_PIN        3
-#endif
 
 
 
@@ -114,32 +96,36 @@
 #define LED_PIN       13
 #define FAN_PIN        8
 #define PS_ON_PIN      4
-#define KILL_PIN      -1
+#define KILL_PIN      -1 //80
 #define SUICIDE_PIN   -1 //PIN that has to be turned on right after start, to keep power flowing.
 #define FAN_0_PIN      6 //Glen
 #define FAN_1_PIN      2 //Glen
 
 
 //2014/04/16
-#ifdef ULTRA_LCD
-  #ifdef NEWPANEL
+#if ENABLED(ULTRA_LCD)
+//#ifdef ULTRA_LCD
+
+  #if ENABLED(NEWPANEL)
+  //#ifdef NEWPANEL
+  
   //arduino pin which triggers an piezzo beeper
     ///////#define BEEPER_PIN 79      // Beeper on AUX-4
-    /****
-	#define LCD_PINS_RS     70 
-    #define LCD_PINS_ENABLE 71
-    #define LCD_PINS_D4     72
-    #define LCD_PINS_D5     73 
-    #define LCD_PINS_D6     74
-    #define LCD_PINS_D7     75
-	***/
+    
+	#define LCD_PINS_RS     70 ////
+    #define LCD_PINS_ENABLE 71 ////
+    #define LCD_PINS_D4     72 ////
+    #define LCD_PINS_D5     73 ////
+    #define LCD_PINS_D6     74 ////
+    #define LCD_PINS_D7     75 ////
+	
     //buttons are directly attached using AUX-2
     
-	//#define BTN_EN1  76
-    //#define BTN_EN2  77
-    //#define BTN_ENC  78  //the click or switch
+	#define BTN_EN1  76
+    #define BTN_EN2  77
+    #define BTN_ENC  78  //the click or switch
    
-    /******/
+
 	#define BLEN_C 2
     #define BLEN_B 1
     #define BLEN_A 0
@@ -148,12 +134,12 @@
     #define SD_DETECT_PIN 46    // Ramps does not use this port
    
     //encoder rotation values
-    #define encrot0 0
-    #define encrot1 2
-    #define encrot2 3
-    #define encrot3 1
+    //#define encrot0 0
+    //#define encrot1 2
+    //#define encrot2 3
+    //#define encrot3 1
 	
-	/********
+	
   #else //old style panel with shift register
     //arduino pin witch triggers an piezzo beeper
     #define BEEPER_PIN 33    //No Beeper added
@@ -172,22 +158,22 @@
     #define LCD_PINS_D7 29
    
     //encoder rotation values
-    #define encrot0 0
-    #define encrot1 2
-    #define encrot2 3
-    #define encrot3 1
+    //#define encrot0 0
+    //#define encrot1 2
+    //#define encrot2 3
+    //#define encrot3 1
    
     //bits in the shift register that carry the buttons for:
     // left up center down right red
     #define BL_LE  7
     #define BL_UP  6
-    //#define BL_MI  5
+    #define BL_MI  5
     #define BL_DW  4
     #define BL_RI  3
     #define BL_ST  2
     #define BLEN_B 1
-    #define BLEN_A 0*****/
-  #endif 
+    #define BLEN_A 0
+  #endif //NEWPANEL
 #endif //ULTRA_LCD
 
 // 2014/04/16
@@ -200,19 +186,42 @@
 #define LCD_PINS_D7     75 ///////Ext2 15 ?
 #define BEEPER_PIN      -1
 
-#define BTN_HOME        80 //ext_16
 #define BTN_ENC         81 //ext_14 //#define SW_ENTER 81 // the click or switch 
-#define BTN_RIGHT       82 //ext_12
-#define BTN_LEFT        83 //ext_10
 #define BTN_EN2         84 //ext2_8 //#define SW_UP 84
 #define BTN_EN1         85 //ext2_6 //#define SW_DOWN  85
+//#define BTN_RIGHT       82 //ext_12
+//#define BTN_LEFT        83 //ext_10
+//#define BTN_HOME        80 //ext_16
+#define BTN_LFT         83
+#define BTN_RT          82
+//#define BTN_UP          84
+//#define BTN_DWN         85
+//#define SW_LEFT 83
+//#define SW_RIGHT 82
+#define SW_HOME 80
 
 
-//bits in the shift register that carry the buttons for:
-// left up center down right red
-#define BL_LE  7
-#define BL_UP  6
-#define BL_MI  5
-#define BL_DW  4
-#define BL_RI  3
-#define BL_ST  2
+
+/****************************************************
+From new pins_RAMBO file
+*****************************************************/
+
+#if ENABLED(VIKI2) || ENABLED(miniVIKI)
+  #define BEEPER_PIN 44
+  // Pins for DOGM SPI LCD Support
+  #define DOGLCD_A0  70
+  #define DOGLCD_CS  71
+  #define LCD_SCREEN_ROT_180
+
+  #define SD_DETECT_PIN -1 // Pin 72 if using easy adapter board
+
+  #if ENABLED(TEMP_STAT_LEDS)
+    #define STAT_LED_RED      22
+    #define STAT_LED_BLUE     32
+  #endif
+#endif // VIKI2/miniVIKI
+
+#if ENABLED(FILAMENT_SENSOR)
+  //Filip added pin for Filament sensor analog input
+  #define FILWIDTH_PIN        3
+#endif
