@@ -150,7 +150,7 @@
   #endif
 
   #if ENABLED(ULTIPANEL)
-    #define NEWPANEL  //enable this if you have a click-encoder panel
+    #define NEWPANEL
     #define ULTRA_LCD
     #ifndef LCD_WIDTH
       #define LCD_WIDTH 20
@@ -214,6 +214,11 @@
       #undef HAS_LCD_CONTRAST
     #endif
   #endif
+
+#if defined( ULTRA_LCD )
+  #define HAS_DISPLAY
+#endif
+
 
 #else // CONFIGURATION_LCD
 
@@ -283,14 +288,17 @@
    * Auto Bed Leveling
    */
   #if ENABLED(AUTO_BED_LEVELING_FEATURE)
+    #define HAS_LEVELING
     // Boundaries for probing based on set limits
     #define MIN_PROBE_X (max(X_MIN_POS, X_MIN_POS + X_PROBE_OFFSET_FROM_EXTRUDER))
     #define MAX_PROBE_X (min(X_MAX_POS, X_MAX_POS + X_PROBE_OFFSET_FROM_EXTRUDER))
     #define MIN_PROBE_Y (max(Y_MIN_POS, Y_MIN_POS + Y_PROBE_OFFSET_FROM_EXTRUDER))
     #define MAX_PROBE_Y (min(Y_MAX_POS, Y_MAX_POS + Y_PROBE_OFFSET_FROM_EXTRUDER))
+    #if ENABLED(Z_ENDSTOP_SERVO_NR)
+      #define SERVO_LEVELING 1
+    #endif
   #endif
 
-  #define SERVO_LEVELING (defined(AUTO_BED_LEVELING_FEATURE) && defined(Z_ENDSTOP_SERVO_NR))
 
   /**
    * Sled Options

@@ -17,6 +17,9 @@
 //===========================================================================
 // Enable DELTA kinematics and most of the default configuration for Deltas
 #define DELTA
+#ifndef KINEMATICS_INCLUDE
+  #define KINEMATICS_INCLUDE GENERATE_KINEMATICS_INCLUDE(delta)
+#endif
 
 // Make delta curves from many straight lines (linear interpolation).
 // This is a trade-off between visible corners (not enough segments)
@@ -81,7 +84,7 @@
 
   // Enable this to sample the bed in a grid (least squares solution).
   // Note: this feature generates 10KB extra code size.
-  #define AUTO_BED_LEVELING_GRID  // Deltas only support grid mode.
+  #define AUTO_BED_LEVELING_GRID
 
   // Non-linear bed leveling will be used.
   // Compensate by interpolating between the nearest four Z probe values for each point.
@@ -148,7 +151,8 @@
     #endif
 
     #ifndef Z_PROBE_ALLEN_KEY_STOW_1_X
-      #define Z_PROBE_ALLEN_KEY_STOW_1_X -64.0 // Move the probe into position
+      // Move the probe into position
+      #define Z_PROBE_ALLEN_KEY_STOW_1_X -64.0
     #endif
     #ifndef Z_PROBE_ALLEN_KEY_STOW_1_Y
       #define Z_PROBE_ALLEN_KEY_STOW_1_Y 56.0
@@ -160,7 +164,8 @@
       #define Z_PROBE_ALLEN_KEY_STOW_1_FEEDRATE HOMING_FEEDRATE_XYZ
     #endif
     #ifndef Z_PROBE_ALLEN_KEY_STOW_2_X
-      #define Z_PROBE_ALLEN_KEY_STOW_2_X -64.0 // Push it down
+      // Push it down
+      #define Z_PROBE_ALLEN_KEY_STOW_2_X -64.0
     #endif
     #ifndef Z_PROBE_ALLEN_KEY_STOW_2_Y
       #define Z_PROBE_ALLEN_KEY_STOW_2_Y 56.0
@@ -172,7 +177,8 @@
       #define Z_PROBE_ALLEN_KEY_STOW_2_FEEDRATE (HOMING_FEEDRATE_XYZ/10)
     #endif
     #ifndef Z_PROBE_ALLEN_KEY_STOW_3_X
-      #define Z_PROBE_ALLEN_KEY_STOW_3_X -64.0 // Move it up to clear
+      // Move it up to clear
+      #define Z_PROBE_ALLEN_KEY_STOW_3_X -64.0
     #endif
     #ifndef Z_PROBE_ALLEN_KEY_STOW_3_Y
       #define Z_PROBE_ALLEN_KEY_STOW_3_Y 56.0
@@ -186,17 +192,17 @@
   #endif
 
 #define Z_MIN_PROBE_ENDSTOP
-#endif // AUTO_BED_LEVELING_FEATURE
+#endif
 #define DISABLE_ZMIN_ENDSTOP
 
 
 // @section homing
 
 // The position of the homing switches
-#define MANUAL_HOME_POSITIONS  // If defined, MANUAL_*_HOME_POS below will be used
+#define MANUAL_HOME_POSITIONS
 // For deltabots this means top and center of the Cartesian print volume.
 #ifndef MANUAL_Z_HOME_POS
-  #define MANUAL_Z_HOME_POS 250 // For delta: Distance between nozzle and print surface after homing.
+  #define MANUAL_Z_HOME_POS 250
 #endif
 
 // delta homing speeds must be the same on xyz
@@ -223,14 +229,14 @@
 #define DEFAULT_ZJERK                 DEFAULT_XYJERK
 
 #ifndef PLA_PREHEAT_FAN_SPEED
-  #define PLA_PREHEAT_FAN_SPEED 255   // Insert Value between 0 and 255
+  #define PLA_PREHEAT_FAN_SPEED 255
 #endif
 
 #ifndef ABS_PREHEAT_HPB_TEMP
   #define ABS_PREHEAT_HPB_TEMP 100
 #endif
 #ifndef ABS_PREHEAT_FAN_SPEED
-  #define ABS_PREHEAT_FAN_SPEED 255   // Insert Value between 0 and 255
+  #define ABS_PREHEAT_FAN_SPEED 255
 #endif
 
 // Delta calibration menu

@@ -13,7 +13,7 @@
     #define MYSERIAL Serial
   #endif // BLUETOOTH
 #else
-  #define MYSERIAL customizedSerial
+  #define MYSERIAL modifiedSerialForMarlin
 #endif
 
 #define SERIAL_CHAR(x) MYSERIAL.write(x)

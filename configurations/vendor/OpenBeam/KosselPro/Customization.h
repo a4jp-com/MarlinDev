@@ -75,7 +75,7 @@
 //===========================================================================
 
 #ifndef DELTA_PROBEABLE_RADIUS
-  #define DELTA_PROBEABLE_RADIUS (DELTA_PRINTABLE_RADIUS)
+  #define DELTA_PROBEABLE_RADIUS (DELTA_PRINTABLE_RADIUS-25)
 #endif
 #ifndef AUTO_BED_LEVELING_GRID_POINTS
   #define AUTO_BED_LEVELING_GRID_POINTS 7
@@ -98,14 +98,14 @@
 #define XY_TRAVEL_SPEED 8000            // X and Y axis travel speed between probes, in mm/min.
 
 #ifndef Z_RAISE_BEFORE_PROBING
-  #define Z_RAISE_BEFORE_PROBING 15     // How much the Z axis will be raised before traveling to the first probing point.
+  #define Z_RAISE_BEFORE_PROBING 100  // How much the Z axis will be raised before traveling to the first probing point.
 #endif
 
 #ifndef Z_RAISE_BETWEEN_PROBINGS
-  #define Z_RAISE_BETWEEN_PROBINGS 15   // How much the Z axis will be raised when traveling from between next probing points.
+  #define Z_RAISE_BETWEEN_PROBINGS 5  // How much the Z axis will be raised when traveling from between next probing points.
 #endif
 #ifndef Z_RAISE_AFTER_PROBING
-  #define Z_RAISE_AFTER_PROBING 15     // How much the Z axis will be raised after the last probing point.
+  #define Z_RAISE_AFTER_PROBING 15    // How much the Z axis will be raised after the last probing point.
 #endif
 
 // Kossel Pro Allen key retractable z-probe

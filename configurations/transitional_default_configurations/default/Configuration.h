@@ -516,6 +516,12 @@
     #ifndef AUTO_BED_LEVELING_GRID_POINTS
       #define AUTO_BED_LEVELING_GRID_POINTS 2
     #endif
+    #ifndef MESH_NUM_X_POINTS
+     #define MESH_NUM_X_POINTS AUTO_BED_LEVELING_GRID_POINTS
+    #endif
+    #ifndef MESH_NUM_Y_POINTS
+     #define MESH_NUM_Y_POINTS AUTO_BED_LEVELING_GRID_POINTS
+    #endif
 
   #else  // !AUTO_BED_LEVELING_GRID
 
@@ -580,45 +586,14 @@
 
   #endif
 
-  // Support for a dedicated Z probe endstop separate from the Z min endstop.
-  // If you would like to use both a Z probe and a Z min endstop together,
-  // uncomment #define Z_MIN_PROBE_ENDSTOP and read the instructions below.
-  // If you still want to use the Z min endstop for homing, disable Z_SAFE_HOMING above.
-  // Example: To park the head outside the bed area when homing with G28.
-  //
-  // WARNING:
-  // The Z min endstop will need to set properly as it would without a Z probe
-  // to prevent head crashes and premature stopping during a print.
-  //
-  // To use a separate Z probe endstop, you must have a Z_MIN_PROBE_PIN
-  // defined in the pins_XXXXX.h file for your control board.
-  // If you are using a servo based Z probe, you will need to enable NUM_SERVOS,
-  // Z_ENDSTOP_SERVO_NR and SERVO_ENDSTOP_ANGLES in the R/C SERVO support below.
-  // RAMPS 1.3/1.4 boards may be able to use the 5V, Ground and the D32 pin
-  // in the Aux 4 section of the RAMPS board. Use 5V for powered sensors,
-  // otherwise connect to ground and D32 for normally closed configuration
-  // and 5V and D32 for normally open configurations.
-  // Normally closed configuration is advised and assumed.
-  // The D32 pin in Aux 4 on RAMPS maps to the Arduino D32 pin.
-  // Z_MIN_PROBE_PIN is setting the pin to use on the Arduino.
-  // Since the D32 pin on the RAMPS maps to D32 on Arduino, this works.
-  // D32 is currently selected in the RAMPS 1.3/1.4 pin file.
-  // All other boards will need changes to the respective pins_XXXXX.h file.
-  //
-  // WARNING:
-  // Setting the wrong pin may have unexpected and potentially disastrous outcomes.
-  // Use with caution and do your homework.
-  //
-  //#define Z_MIN_PROBE_ENDSTOP
-
 #endif // AUTO_BED_LEVELING_FEATURE
 
-
-// @section homing
-
-// The position of the homing switches
-//#define MANUAL_HOME_POSITIONS  // If defined, MANUAL_*_HOME_POS below will be used
-//#define BED_CENTER_AT_0_0  // If defined, the center of the bed is at (X=0, Y=0)
+#ifndef MESH_NUM_X_POINTS
+  #define MESH_NUM_X_POINTS 1
+#endif
+#ifndef MESH_NUM_Y_POINTS
+  #define MESH_NUM_Y_POINTS 1
+#endif
 
 // Manual homing switch locations:
 // For deltabots this means top and center of the Cartesian print volume.
@@ -630,11 +605,6 @@
   #endif
 #endif
 
-// @section movement
-
-/**
- * MOVEMENT SETTINGS
- */
 
 // delta homing speeds must be the same on xyz
 #ifndef HOMING_FEEDRATE
@@ -674,13 +644,6 @@
   #define DEFAULT_EJERK               5.0     // (mm/sec)
 #endif
 
-
-//=============================================================================
-//============================= Additional Features ===========================
-//=============================================================================
-
-// @section more
-
 // Custom M code points
 #define CUSTOM_M_CODES
 #if ENABLED(CUSTOM_M_CODES)
@@ -710,13 +673,6 @@
   #define EEPROM_CHITCHAT
 #endif
 
-//
-// M100 Free Memory Watcher
-//
-//#define M100_FREE_MEMORY_WATCHER // uncomment to add the M100 Free Memory Watcher for debug purpose
-
-// @section temperature
-
 // Preheat Constants
 #define PLA_PREHEAT_HOTEND_TEMP 180
 #define PLA_PREHEAT_HPB_TEMP 70
@@ -732,27 +688,14 @@
   #define ABS_PREHEAT_FAN_SPEED 0   // Insert Value between 0 and 255
 #endif
 
-//==============================LCD and SD support=============================
-// @section lcd
-
-// Define your display language below. Replace (en) with your language code and uncomment.
-// en, pl, fr, de, es, ru, bg, it, pt, pt-br, fi, an, nl, ca, eu, kana, kana_utf8, cn, test
 // See also language.h
 #ifndef LANGUAGE_INCLUDE
   #define LANGUAGE_INCLUDE GENERATE_LANGUAGE_INCLUDE(en)
 #endif
-
-// Choose ONE of these 3 charsets. This has to match your hardware. Ignored for full graphic display.
-// To find out what type you have - compile with (test) - upload - click to get the menu. You'll see two typical lines from the upper half of the charset.
-// See also documentation/LCDLanguageFont.md
+#ifndef DISPLAY_CHARSET_HD44780_JAPAN
   #define DISPLAY_CHARSET_HD44780_JAPAN
-  //#define DISPLAY_CHARSET_HD44780_WESTERN
-  //#define DISPLAY_CHARSET_HD44780_CYRILLIC
-
-// Incrementing this by 1 will double the software PWM frequency,
-// affecting heaters, and the fan if FAN_SOFT_PWM is enabled.
-// However, control resolution will be halved for each increment;
-// at zero value, there are 128 effective control positions.
+#endif
+  
 #define SOFT_PWM_SCALE 0
 
 #if ENABLED(DEACTIVATE_SERVOS_AFTER_MOVE)

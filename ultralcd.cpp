@@ -1,24 +1,20 @@
 #include "MarlinFirmware.h"
-#include "ultralcd.h"
 #if ENABLED(ULTRA_LCD)
-#include "messages/language.h"
 #include "cardreader.h"
-#include "temperature.h"
-#include "stepper.h"
 #include "configuration_store.h"
+#include "display/display.h"
+#include "host_interface/host_io.h"
+#include "messages/language.h"
+#include "stepper.h"
+#include "temperature.h"
+#include "thermal/preheat.h"
+#include "ultralcd.h"
+#include "unit_conversion.h"
 
 int8_t encoderDiff; // updated from interrupt context and added to encoderPosition every LCD update
 
 bool encoderRateMultiplierEnabled;
 int32_t lastEncoderMovementMillis;
-
-int plaPreheatHotendTemp;
-int plaPreheatHPBTemp;
-int plaPreheatFanSpeed;
-
-int absPreheatHotendTemp;
-int absPreheatHPBTemp;
-int absPreheatFanSpeed;
 
 #if ENABLED(FILAMENT_LCD_DISPLAY)
   millis_t previous_lcd_status_ms = 0;

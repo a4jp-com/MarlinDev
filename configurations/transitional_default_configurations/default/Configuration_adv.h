@@ -27,8 +27,12 @@
    * degrees, the machine is halted, requiring a hard reset. This test restarts with any M104/M109,
    * but only if the current temperature is far enough below the target for a reliable test.
    */
-  #define WATCH_TEMP_PERIOD 16                // Seconds
-  #define WATCH_TEMP_INCREASE 4               // Degrees Celsius
+  #ifndef WATCH_TEMP_PERIOD
+    #define WATCH_TEMP_PERIOD 16              // Seconds
+  #endif
+  #ifndef WATCH_TEMP_INCREASE
+    #define WATCH_TEMP_INCREASE 4             // Degrees Celsius
+  #endif
 #endif
 
 #if ENABLED(THERMAL_PROTECTION_BED)
@@ -133,7 +137,10 @@
 
 // @section homing
 
-#define ENDSTOPS_ONLY_FOR_HOMING // If defined the endstops will only be used for homing
+// If defined the endstops will only be used for homing
+#ifndef ENDSTOPS_ONLY_FOR_HOMING
+  #define ENDSTOPS_ONLY_FOR_HOMING 
+#endif
 
 // @section extras
 

@@ -167,7 +167,7 @@
    * Check if Probe_Offset * Grid Points is greater than Probing Range
    */
   #if ENABLED(AUTO_BED_LEVELING_GRID)
-    #ifndef DELTA_PROBABLE_RADIUS
+    #ifndef DELTA_PROBEABLE_RADIUS
       // Be sure points are in the right order
       #if LEFT_PROBE_BED_POSITION > RIGHT_PROBE_BED_POSITION
         #error LEFT_PROBE_BED_POSITION must be less than RIGHT_PROBE_BED_POSITION.
@@ -229,7 +229,7 @@
     #endif
 
     #if ENABLED(Z_MIN_PROBE_REPEATABILITY_TEST)
-      #error Z_MIN_PROBE_REPEATABILITY_TEST is not supported with DELTA yet.
+//      #error Z_MIN_PROBE_REPEATABILITY_TEST is not supported with DELTA yet.   // Bypass for Roxy
     #endif
 
   #endif
@@ -361,6 +361,8 @@
   #error HAS_AUTOMATIC_VERSIONING deprecated - use USE_AUTOMATIC_VERSIONING instead
 #elif defined(ENABLE_AUTO_BED_LEVELING)
   #error ENABLE_AUTO_BED_LEVELING deprecated - use AUTO_BED_LEVELING_FEATURE instead
+#elif defined(DELTA_PROBABLE_RADIUS)
+  #error DELTA_PROBABLE_RADIUS deprecated - use DELTA_PROBEABLE_RADIUS instead
 #endif
 
 #endif //SANITYCHECK_H

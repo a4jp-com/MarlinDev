@@ -2,19 +2,8 @@
 #define ULTRALCD_H
 
 #include "MarlinFirmware.h"
-#if ENABLED(ULTRA_LCD)
+#if ENABLED(HAS_DISPLAY)
   #include "buzzer.h"
-
-  int lcd_strlen(char* s);
-  int lcd_strlen_P(const char* s);
-  void lcd_update();
-  void lcd_init();
-  bool lcd_hasstatus();
-  void lcd_setstatus(const char* message, const bool persist=false);
-  void lcd_setstatuspgm(const char* message, const uint8_t level=0);
-  void lcd_setalertstatuspgm(const char* message);
-  void lcd_reset_alert_level();
-  bool lcd_detected(void);
 
   #if ENABLED(LCD_USE_I2C_BUZZER)
     void lcd_buzz(long duration, uint16_t freq);
@@ -32,9 +21,10 @@
   #define LCD_MESSAGEPGM(x) lcd_setstatuspgm(PSTR(x))
   #define LCD_ALERTMESSAGEPGM(x) lcd_setalertstatuspgm(PSTR(x))
 
-  #define LCD_UPDATE_INTERVAL 100
+  #define LCD_UPDATE_INTERVAL 160
   #define LCD_TIMEOUT_TO_STATUS 15000
 
+  #include "display/panel.h"
   #if ENABLED(ULTIPANEL)
     void lcd_buttons_update();
     extern volatile uint8_t buttons;  //the last checked buttons in a bit array.
@@ -58,7 +48,6 @@
     extern millis_t previous_lcd_status_ms;
   #endif
   void lcd_quick_feedback(); // Audible feedback for a button click - could also be visual
-  bool lcd_clicked();
 
   void lcd_ignore_click(bool b=true);
 
@@ -102,18 +91,7 @@
   #endif//NEWPANEL
 
 #else //no LCD
-  FORCE_INLINE void lcd_update() {}
-  FORCE_INLINE void lcd_init() {}
-  FORCE_INLINE bool lcd_hasstatus() { return false; }
-  FORCE_INLINE void lcd_setstatus(const char* message, const bool persist=false) {UNUSED(message); UNUSED(persist);}
-  FORCE_INLINE void lcd_setstatuspgm(const char* message, const uint8_t level=0) {UNUSED(message); UNUSED(level);}
   FORCE_INLINE void lcd_buttons_update() {}
-  FORCE_INLINE void lcd_reset_alert_level() {}
-  FORCE_INLINE bool lcd_detected(void) { return true; }
-
-  #define LCD_MESSAGEPGM(x) do{}while(0)
-  #define LCD_ALERTMESSAGEPGM(x) do{}while(0)
-
 #endif //ULTRA_LCD
 
 char* itostr2(const uint8_t& x);

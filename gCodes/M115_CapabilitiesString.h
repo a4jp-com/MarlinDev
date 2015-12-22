@@ -1,3 +1,3 @@
 // gCode Implementation Interfaces
 
-  void gcode_M115();
+void gcode_M115();
