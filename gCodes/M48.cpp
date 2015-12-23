@@ -11,6 +11,8 @@
 
 #include "host_interface/host_io.h"
 
+#if ENABLED(HAS_PROBE)
+
 // This is redundant since the SanityCheck.h already checks for a valid Z_MIN_PROBE_PIN, but here for clarity.
 #if ENABLED(Z_MIN_PROBE_ENDSTOP)
   #if !HAS_Z_PROBE
@@ -252,3 +254,5 @@ void gcode_M48() {
   delay(25);
   clean_up_after_endstop_move();
 }
+
+#endif

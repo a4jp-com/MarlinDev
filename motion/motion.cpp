@@ -1,6 +1,15 @@
 #include "MarlinFirmware.h"
 #include "motion/motion.h"
 #include "debug_only_routines.h"
+
+#ifndef XY_TRAVEL_SPEED
+  #define XY_TRAVEL_SPEED 1000   // So slow that we will recoginize it as a problem
+#endif
+
+#if ENABLED(AUTO_BED_LEVELING_FEATURE)
+  int xy_travel_speed = XY_TRAVEL_SPEED;
+#endif
+
 /**
  *  Plan a move to (X, Y, Z) and set the current_position
  *  The final current_position may not be the one that was requested
@@ -23,7 +32,7 @@ void do_blocking_move_to(float x, float y, float z) {
   }
 #endif
 #if ENABLED(DELTA)
-  feedrate = XY_TRAVEL_SPEED;
+  feedrate = xy_travel_speed;
 #if ENABLED(ROXY_ONLY)
   //
   // Should we break up the move because it is too big ???
@@ -42,7 +51,7 @@ void do_blocking_move_to(float x, float y, float z) {
     feedrate = oldFeedRate;
     recursion_cnt--; // Roxy debug stuff
     return;
-  } else 
+  } else
 #endif
   {		// No...  It is small enough to do in one piece.
     destination[X_AXIS] = x;

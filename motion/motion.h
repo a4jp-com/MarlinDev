@@ -2,6 +2,8 @@ extern float feedrate, saved_feedrate;
 extern float current_position[NUM_AXIS];
 extern float destination[NUM_AXIS];
 extern const float homing_feedrate[];
+extern uint8_t active_extruder;
+extern int xy_travel_speed;
 
 extern void do_blocking_move_to(float x, float y, float z);
 
@@ -61,3 +63,8 @@ inline void sync_plan_position() {
     plan_set_position(delta[X_AXIS], delta[Y_AXIS], delta[Z_AXIS], current_position[E_AXIS]);
   }
 #endif
+
+inline void line_to_current_position() {
+  plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], feedrate / 60, active_extruder);
+}
+
