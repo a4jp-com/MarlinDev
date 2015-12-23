@@ -140,18 +140,18 @@
     //#define BTN_ENC  78  //the click or switch
 
     /******/
-	#define BLEN_C 2
-    #define BLEN_B 1
-    #define BLEN_A 0
+	#define BLEN_C -1//2
+    #define BLEN_B -1//1
+    #define BLEN_A -1//0
 
 
     #define SD_DETECT_PIN 46    // Ramps does not use this port
 
     //encoder rotation values
-    #define encrot0 0
-    #define encrot1 2
-    #define encrot2 3
-    #define encrot3 1
+    #define encrot0 -1//0
+    #define encrot1 -1//2
+    #define encrot2 -1//3
+    #define encrot3 -1//1
 
 	/********
   #else //old style panel with shift register
@@ -192,27 +192,27 @@
 
 // 2014/04/16
 
-#define LCD_PINS_RS     70 //ext2_5
-#define LCD_PINS_ENABLE 71 //ext2_7
-#define LCD_PINS_D4     72 ///////Ext2 9 ?
-#define LCD_PINS_D5     73 ///////Ext2 11 ?
-#define LCD_PINS_D6     74 //ext2_13
-#define LCD_PINS_D7     75 ///////Ext2 15 ?
+#define LCD_PINS_RS     -1//70 //ext2_5
+#define LCD_PINS_ENABLE -1//71 //ext2_7
+#define LCD_PINS_D4     -1//72 ///////Ext2 9 ?
+#define LCD_PINS_D5     -1//73 ///////Ext2 11 ?
+#define LCD_PINS_D6     -1//74 //ext2_13
+#define LCD_PINS_D7     -1//75 ///////Ext2 15 ?
 #define BEEPER_PIN      -1
 
-#define BTN_HOME        80 //ext_16
-#define BTN_ENC         81 //ext_14 //#define SW_ENTER 81 // the click or switch
-#define BTN_RIGHT       82 //ext_12
-#define BTN_LEFT        83 //ext_10
-#define BTN_EN2         84 //ext2_8 //#define SW_UP 84
-#define BTN_EN1         85 //ext2_6 //#define SW_DOWN  85
+#define BTN_HOME        -1//80 //ext_16
+#define BTN_ENC         -1//81 //ext_14 //#define SW_ENTER 81 // the click or switch
+#define BTN_RIGHT       -1//82 //ext_12
+#define BTN_LEFT        -1//83 //ext_10
+#define BTN_EN2         -1//84 //ext2_8 //#define SW_UP 84
+#define BTN_EN1         -1//85 //ext2_6 //#define SW_DOWN  85
 
 
 //bits in the shift register that carry the buttons for:
 // left up center down right red
-#define BL_LE  7
-#define BL_UP  6
-#define BL_MI  5
-#define BL_DW  4
-#define BL_RI  3
-#define BL_ST  2
+#define BL_LE  -1//7
+#define BL_UP  -1//6
+#define BL_MI  -1//5
+#define BL_DW  -1//4
+#define BL_RI  -1//3
+#define BL_ST  -1//2
