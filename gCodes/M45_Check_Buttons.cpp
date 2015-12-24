@@ -21,9 +21,10 @@ void gcode_M45() {
       if (v)  SERIAL_PROTOCOL('1');
       else  SERIAL_PROTOCOL('0');
       if (pin_number % 10 == 9)
-        SERIAL_PROTOCOL(' ');
+        SERIAL_PROTOCOL(' '); //Adds space after 10 characters
     }
     SERIAL_PROTOCOL('\n');
   }
-  SERIAL_PROTOCOL('ended');
+  SERIAL_PROTOCOLPGM("Button Test Ended"); //Double quotes for a text string
+  SERIAL_EOL;
 }

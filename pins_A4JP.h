@@ -200,12 +200,12 @@
 #define LCD_PINS_D7     -1//75 ///////Ext2 15 ?
 #define BEEPER_PIN      -1
 
-#define BTN_HOME        -1//80 //ext_16
-#define BTN_ENC         -1//81 //ext_14 //#define SW_ENTER 81 // the click or switch
-#define BTN_RIGHT       -1//82 //ext_12
-#define BTN_LEFT        -1//83 //ext_10
-#define BTN_EN2         -1//84 //ext2_8 //#define SW_UP 84
-#define BTN_EN1         -1//85 //ext2_6 //#define SW_DOWN  85
+#define BTN_HOME        80//80 ok//ext_16
+#define BTN_ENC         81//81 ok//ext_14 //#define SW_ENTER 81//the click or switch
+#define BTN_RIGHT       82//82 ok//ext_12
+#define BTN_LEFT        83//83 ok//ext_10
+#define BTN_EN2         84//84 ok UP//ext2_8 //#define SW_UP 84
+#define BTN_EN1         85//85 ok DOWN//ext2_6 //#define SW_DOWN  85
 
 
 //bits in the shift register that carry the buttons for:
