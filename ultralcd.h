@@ -21,19 +21,10 @@
   #define LCD_MESSAGEPGM(x) lcd_setstatuspgm(PSTR(x))
   #define LCD_ALERTMESSAGEPGM(x) lcd_setalertstatuspgm(PSTR(x))
 
-  #define LCD_UPDATE_INTERVAL 160
+  #define LCD_UPDATE_INTERVAL 100
   #define LCD_TIMEOUT_TO_STATUS 15000
 
   #include "display/panel.h"
-  #if ENABLED(ULTIPANEL)
-    void lcd_buttons_update();
-    extern volatile uint8_t buttons;  //the last checked buttons in a bit array.
-    #if ENABLED(REPRAPWORLD_KEYPAD)
-      extern volatile uint8_t buttons_reprapworld_keypad; // to store the keypad shift register values
-    #endif
-  #else
-    FORCE_INLINE void lcd_buttons_update() {}
-  #endif
 
   extern int plaPreheatHotendTemp;
   extern int plaPreheatHPBTemp;

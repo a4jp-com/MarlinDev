@@ -70,6 +70,8 @@
 // For direct drive extruder
 #define INVERT_E0_DIR true
 
+#define USE_PROBE
+
 //===========================================================================
 //========================== Bed Tilt Compensation ==========================
 //===========================================================================
@@ -98,11 +100,11 @@
 #define XY_TRAVEL_SPEED 8000            // X and Y axis travel speed between probes, in mm/min.
 
 #ifndef Z_RAISE_BEFORE_PROBING
-  #define Z_RAISE_BEFORE_PROBING 100  // How much the Z axis will be raised before traveling to the first probing point.
+  #define Z_RAISE_BEFORE_PROBING 40   // How much the Z axis will be raised before traveling to the first probing point.
 #endif
 
 #ifndef Z_RAISE_BETWEEN_PROBINGS
-  #define Z_RAISE_BETWEEN_PROBINGS 5  // How much the Z axis will be raised when traveling from between next probing points.
+  #define Z_RAISE_BETWEEN_PROBINGS 15   // How much the Z axis will be raised when traveling from between next probing points.
 #endif
 #ifndef Z_RAISE_AFTER_PROBING
   #define Z_RAISE_AFTER_PROBING 15    // How much the Z axis will be raised after the last probing point.

@@ -14,5 +14,5 @@ bool lcd_clicked();
 #else
   FORCE_INLINE void lcd_buttons_update() {}
 #endif
- 
+
 #endif

@@ -10,6 +10,7 @@ bool z_probe_is_active = false;
 #include "display/display.h"
 #include "unit_conversion.h"
 #include "thermal/heater_management.h"
+#include "host_interface/host_io.h"
 
 #if ENABLED(MANUAL_ALLEN_KEY_DEPLOYMENT)
   #include "display/panel.h"

@@ -114,9 +114,6 @@
     #define Z_RAISE_AFTER_PROBING 50    // How much the Z axis will be raised after the last probing point.
   #endif
 
-  //#define Z_PROBE_END_SCRIPT "G1 Z10 F12000\nG1 X15 Y330\nG1 Z0.5\nG1 Z10" // These commands will be executed in the end of G29 routine.
-                                                                             // Useful to retract a deployable Z probe.
-
   // Allen key retractable z-probe as seen on many Kossel delta printers - http://reprap.org/wiki/Kossel#Automatic_bed_leveling_probe
   // Deploys by touching z-axis belt. Retracts by pushing the probe down. Uses Z_MIN_PIN.
   //#define Z_PROBE_ALLEN_KEY
@@ -141,10 +138,10 @@
       #define Z_PROBE_ALLEN_KEY_DEPLOY_2_X 0.0
     #endif
     #ifndef Z_PROBE_ALLEN_KEY_DEPLOY_2_Y
-      #define Z_PROBE_ALLEN_KEY_DEPLOY_2_Y DELTA_PRINTABLE_RADIUS
+      #define Z_PROBE_ALLEN_KEY_DEPLOY_2_Y Z_PROBE_ALLEN_KEY_DEPLOY_1_Y
     #endif
     #ifndef Z_PROBE_ALLEN_KEY_DEPLOY_2_Z
-      #define Z_PROBE_ALLEN_KEY_DEPLOY_2_Z 100.0
+      #define Z_PROBE_ALLEN_KEY_DEPLOY_2_Z Z_PROBE_ALLEN_KEY_DEPLOY_1_Z
     #endif
     #ifndef Z_PROBE_ALLEN_KEY_DEPLOY_2_FEEDRATE
       #define Z_PROBE_ALLEN_KEY_DEPLOY_2_FEEDRATE (HOMING_FEEDRATE_XYZ/10)
@@ -165,10 +162,10 @@
     #endif
     #ifndef Z_PROBE_ALLEN_KEY_STOW_2_X
       // Push it down
-      #define Z_PROBE_ALLEN_KEY_STOW_2_X -64.0
+      #define Z_PROBE_ALLEN_KEY_STOW_2_X Z_PROBE_ALLEN_KEY_STOW_1_X
     #endif
     #ifndef Z_PROBE_ALLEN_KEY_STOW_2_Y
-      #define Z_PROBE_ALLEN_KEY_STOW_2_Y 56.0
+      #define Z_PROBE_ALLEN_KEY_STOW_2_Y Z_PROBE_ALLEN_KEY_STOW_1_Y
     #endif
     #ifndef Z_PROBE_ALLEN_KEY_STOW_2_Z
       #define Z_PROBE_ALLEN_KEY_STOW_2_Z 3.0
@@ -178,10 +175,10 @@
     #endif
     #ifndef Z_PROBE_ALLEN_KEY_STOW_3_X
       // Move it up to clear
-      #define Z_PROBE_ALLEN_KEY_STOW_3_X -64.0
+      #define Z_PROBE_ALLEN_KEY_STOW_3_X Z_PROBE_ALLEN_KEY_STOW_2_X
     #endif
     #ifndef Z_PROBE_ALLEN_KEY_STOW_3_Y
-      #define Z_PROBE_ALLEN_KEY_STOW_3_Y 56.0
+      #define Z_PROBE_ALLEN_KEY_STOW_3_Y Z_PROBE_ALLEN_KEY_STOW_2_Y
     #endif
     #ifndef Z_PROBE_ALLEN_KEY_STOW_3_Z
       #define Z_PROBE_ALLEN_KEY_STOW_3_Z 50.0

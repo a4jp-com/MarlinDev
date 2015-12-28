@@ -22,9 +22,9 @@
  *         7 | 11
  */
 
-#ifdef ARDUINO_ARCH_AVR
-  #if !defined(__AVR_ATmega1280__) && !defined(__AVR_ATmega2560__)
-    #error Oops!  Make sure you have 'Arduino Mega' selected from the 'Tools -> Boards' menu.
+#if !defined(__AVR_ATmega1280__) && !defined(__AVR_ATmega2560__)
+  #ifdef ARDUINO_ARCH_AVR
+    #error Oops!  Make sure you have 'Arduino Mega' selected from the Marlin AVR section of the 'Tools -> Boards' menu.
   #endif
 #endif
 

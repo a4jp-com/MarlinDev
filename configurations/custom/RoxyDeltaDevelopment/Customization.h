@@ -2,7 +2,7 @@
 #define ROXY_ONLY
 
 #define UUID "17138bb3-b0e5-483f-9bfd-b9ffe9667e9b"
-#define STRING_CONFIG_H_AUTHOR "(Roxanne Neufeld)"
+#define STRING_CONFIG_H_AUTHOR "(Roxanne Neufeld)" // Who made the changes.
 
 #ifndef MOTHERBOARD
   #define MOTHERBOARD BOARD_ULTIMAKER
@@ -10,10 +10,8 @@
 #define CUSTOM_MACHINE_NAME "Roxy's G2s"
 
 #define EXTRUDERS 2
-// (in mm) for each extruder, offset of the hotend on the X axis
-#define EXTRUDER_OFFSET_X {0.0, 18.9}
-// (in mm) for each extruder, offset of the hotend on the Y axis
-#define EXTRUDER_OFFSET_Y {0.0, 11.0}
+#define EXTRUDER_OFFSET_X {0.0, 18.9}  // (in mm) for each extruder, offset of the hotend on the X axis
+#define EXTRUDER_OFFSET_Y {0.0, 11.0}  // (in mm) for each extruder, offset of the hotend on the Y axis
 
 // 1 is 100k thermistor - best choice for EPCOS 100k (4.7k pullup)
 #define TEMP_SENSOR_0 1
@@ -45,8 +43,10 @@
 // Horizontal offset of the universal joints on the carriages.
 #define DELTA_CARRIAGE_OFFSET 25.0 // mm
 
-//Total value at 101.00
-#define DELTA_RADIUS (DELTA_SMOOTH_ROD_OFFSET-DELTA_EFFECTOR_OFFSET-DELTA_CARRIAGE_OFFSET+0.00)  
+// Horizontal distance bridged by diagonal push rods when effector is centered.
+//#define DELTA_RADIUS (DELTA_SMOOTH_ROD_OFFSET-DELTA_EFFECTOR_OFFSET-DELTA_CARRIAGE_OFFSET+1.5)  // was 1.6
+//#define DELTA_RADIUS (DELTA_SMOOTH_ROD_OFFSET-DELTA_EFFECTOR_OFFSET-DELTA_CARRIAGE_OFFSET+1.00)  //Total value currently needs to be 102.00
+#define DELTA_RADIUS (DELTA_SMOOTH_ROD_OFFSET-DELTA_EFFECTOR_OFFSET-DELTA_CARRIAGE_OFFSET+0.00)  //Total value at 101.00
 
 // Print surface diameter/2 minus unreachable space (avoid collisions with vertical towers).
 #define DELTA_PRINTABLE_RADIUS 90
@@ -54,11 +54,11 @@
 // Effective X/Y positions of the three vertical towers.
 #define SIN_60 0.8660254037844386
 #define COS_60 0.5
-#define DELTA_TOWER1_X -SIN_60*DELTA_RADIUS
+#define DELTA_TOWER1_X -SIN_60*DELTA_RADIUS // front left tower
 #define DELTA_TOWER1_Y -COS_60*DELTA_RADIUS
-#define DELTA_TOWER2_X SIN_60*DELTA_RADIUS
+#define DELTA_TOWER2_X SIN_60*DELTA_RADIUS // front right tower
 #define DELTA_TOWER2_Y -COS_60*DELTA_RADIUS
-#define DELTA_TOWER3_X 0.0
+#define DELTA_TOWER3_X 0.0 // back middle tower
 #define DELTA_TOWER3_Y DELTA_RADIUS
 
 // Diagonal rod squared
@@ -86,7 +86,7 @@
 #define RIGHT_PROBE_BED_POSITION (DELTA_PROBEABLE_RADIUS+10)
 #define FRONT_PROBE_BED_POSITION (-DELTA_PROBEABLE_RADIUS+25)
 #define BACK_PROBE_BED_POSITION (DELTA_PROBEABLE_RADIUS-25)
-#define MIN_PROBE_EDGE 5
+#define MIN_PROBE_EDGE 5 // The Z probe square sides can be no smaller than this.
 #define AUTO_BED_LEVELING_GRID_POINTS 5
 
 #define ABL_PROBE_PT_1_X (54+19)
@@ -101,20 +101,20 @@
 #define X_PROBE_OFFSET_FROM_EXTRUDER  36
 #define Y_PROBE_OFFSET_FROM_EXTRUDER -11
 #define Z_PROBE_OFFSET_FROM_EXTRUDER  -2.8
-#define Z_RAISE_BEFORE_HOMING 20
+#define Z_RAISE_BEFORE_HOMING 20       // (in mm) Raise Z axis before homing (G28) for Z probe clearance.
+                                       // Be sure you have this distance over your Z_MAX_POS in case.
 
-#define XY_TRAVEL_SPEED 3000
+#define XY_TRAVEL_SPEED 3000         // X and Y axis travel speed between probes, in mm/min.
 
-#define Z_RAISE_BEFORE_PROBING 15
-#define Z_RAISE_BETWEEN_PROBINGS 20
-#define Z_RAISE_AFTER_PROBING 20 
+#define Z_RAISE_BEFORE_PROBING 15   // How much the Z axis will be raised before traveling to the first probing point.
+#define Z_RAISE_BETWEEN_PROBINGS 20 // How much the Z axis will be raised when traveling from between next probing points.
+#define Z_RAISE_AFTER_PROBING 20    // How much the Z axis will be raised after the last probing point.
 
 #define Z_MIN_PROBE_ENDSTOP
 #define Z_MIN_PROBE_PIN 30
 
-// If defined, the center of the bed is at (X=0, Y=0)
-#define BED_CENTER_AT_0_0
-#define MANUAL_Z_HOME_POS 203.85
+#define BED_CENTER_AT_0_0  // If defined, the center of the bed is at (X=0, Y=0)
+#define MANUAL_Z_HOME_POS 203.85	// #define MANUAL_Z_HOME_POS 204.3
 //#define MANUAL_Z_HOME_POS 100.85	// if I need some space to check things out!
 
 #define HOMING_FEEDRATE_XYZ (200*10)
@@ -133,15 +133,14 @@
 #define WATCH_TEMP_PERIOD 20                // Seconds
 #define WATCH_TEMP_INCREASE 2               // Degrees Celsius
 
-#define DEFAULT_MEASURED_FILAMENT_DIA  DEFAULT_NOMINAL_FILAMENT_DIA 
-// changed by Roxy from 60
-#define DEFAULT_STEPPER_DEACTIVE_TIME (60*5)
+#define DEFAULT_MEASURED_FILAMENT_DIA  DEFAULT_NOMINAL_FILAMENT_DIA  //set measured to nominal initially
+#define DEFAULT_STEPPER_DEACTIVE_TIME (60*5)		// changed by Roxy from 60
 
 // Add support for experimental filament exchange support M600; requires display
 #if ENABLED(ULTIPANEL)
   #define FILAMENTCHANGEENABLE
   #if ENABLED(FILAMENTCHANGEENABLE)
-    #define AUTO_FILAMENT_CHANGE
+    #define AUTO_FILAMENT_CHANGE                //This extrude filament until you press the button on LCD
     #define AUTO_FILAMENT_CHANGE_LENGTH 0.04    //Extrusion length on automatic extrusion loop
     #define AUTO_FILAMENT_CHANGE_FEEDRATE 300   //Extrusion feedrate (mm/min) on automatic extrusion loop
   #endif

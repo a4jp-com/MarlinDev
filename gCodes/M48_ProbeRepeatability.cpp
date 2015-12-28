@@ -11,7 +11,7 @@
 
 #include "host_interface/host_io.h"
 
-#if ENABLED(HAS_PROBE)
+#if ENABLED(USE_PROBE)
 
 // This is redundant since the SanityCheck.h already checks for a valid Z_MIN_PROBE_PIN, but here for clarity.
 #if ENABLED(Z_MIN_PROBE_ENDSTOP)

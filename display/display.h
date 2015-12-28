@@ -31,5 +31,5 @@
   #define LCD_ALERTMESSAGEPGM(x) do{}while(0)
 
 #endif
-  
+
 #endif

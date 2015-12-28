@@ -215,10 +215,9 @@
     #endif
   #endif
 
-#if defined( ULTRA_LCD )
-  #define HAS_DISPLAY
-#endif
-
+  #if defined( ULTRA_LCD )
+    #define HAS_DISPLAY
+  #endif
 
 #else // CONFIGURATION_LCD
 

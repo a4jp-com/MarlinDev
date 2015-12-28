@@ -950,10 +950,6 @@ void get_command() {
 bool code_has_value() {
   int i = 1;
   char c = seen_pointer[i];
-
-  while (c == ' ')		// skip past any white space between GCode and number
-     c = seen_pointer[++i];
-
   if (c == '-' || c == '+') c = seen_pointer[++i];
   if (c == '.') c = seen_pointer[++i];
   return (c >= '0' && c <= '9');
@@ -1155,18 +1151,13 @@ void setup_for_endstop_move() {
     void prepare_move_raw() {
       #if ENABLED(DEBUG_LEVELING_FEATURE)
         if (marlin_debug_flags & DEBUG_LEVELING) {
-//SERIAL_ECHOLNPGM("at check point #1\n");
           print_xyz("prepare_move_raw > destination", destination);
         }
       #endif
       refresh_cmd_timeout();
-//SERIAL_ECHOLNPGM("at check point #4\n");
       calculate_delta(destination);
-//SERIAL_ECHOLNPGM("at check point #5\n");
       plan_buffer_line(delta[X_AXIS], delta[Y_AXIS], delta[Z_AXIS], destination[E_AXIS], (feedrate / 60) * (feedrate_multiplier / 100.0), active_extruder);
-//SERIAL_ECHOLNPGM("at check point #6\n");
       set_current_to_destination();
-//SERIAL_ECHOLNPGM("at check point #7\n");
     }
   #endif
 
@@ -1236,11 +1227,6 @@ void setup_for_endstop_move() {
 
   #endif // !AUTO_BED_LEVELING_GRID
 
-  /**
-   *  Plan a move to (X, Y, Z) and set the current_position
-   *  The final current_position may not be the one that was requested
-   */
-
   void clean_up_after_endstop_move() {
     #if ENABLED(ENDSTOPS_ONLY_FOR_HOMING)
       #if ENABLED(DEBUG_LEVELING_FEATURE)
@@ -1297,14 +1283,9 @@ void setup_for_endstop_move() {
 
     // Print calibration results for plotting or manual frame adjustment.
     static void print_bed_level() {
-//    for (int y = 0; y < AUTO_BED_LEVELING_GRID_POINTS; y++) {
-      for (int y=AUTO_BED_LEVELING_GRID_POINTS-1; y>=0; y--) {
+      for (int y = 0; y < AUTO_BED_LEVELING_GRID_POINTS; y++) {
         for (int x = 0; x < AUTO_BED_LEVELING_GRID_POINTS; x++) {
-
-          if (bed_level[x][y] >= 0.0)		// We need an extra space to make the columns line
-          	SERIAL_PROTOCOLCHAR(' ');	// up if the number is positive.
-
-          SERIAL_PROTOCOL_F(bed_level[x][y], 3);
+          SERIAL_PROTOCOL_F(bed_level[x][y], 2);
           SERIAL_PROTOCOLCHAR(' ');
         }
         SERIAL_EOL;
@@ -2426,34 +2407,11 @@ inline void gcode_G28() {
       if (left_out || right_out || front_out || back_out) {
         if (left_out) {
           out_of_range_error(PSTR("(L)eft"));
-
-SERIAL_PROTOCOLPGM(" left_probe_bed_position:");
-SERIAL_PROTOCOL( left_probe_bed_position);
-SERIAL_PROTOCOLPGM(" \n");
-SERIAL_PROTOCOLPGM(" MIN_PROBE_X:");
-SERIAL_PROTOCOL( MIN_PROBE_X);
-SERIAL_PROTOCOLPGM(" \n");
-
           left_probe_bed_position = left_out_l ? MIN_PROBE_X : right_probe_bed_position - MIN_PROBE_EDGE;
         }
         if (right_out) {
           out_of_range_error(PSTR("(R)ight"));
           right_probe_bed_position = right_out_r ? MAX_PROBE_X : left_probe_bed_position + MIN_PROBE_EDGE;
-
-SERIAL_PROTOCOLPGM(" right_probe_bed_position:");
-SERIAL_PROTOCOL( right_probe_bed_position);
-SERIAL_PROTOCOLPGM(" \n");
-SERIAL_PROTOCOLPGM(" right_out_r:");
-SERIAL_PROTOCOL( right_out_r);
-SERIAL_PROTOCOLPGM(" \n");
-SERIAL_PROTOCOLPGM(" MIN_PROBE_X:");
-SERIAL_PROTOCOL( MIN_PROBE_X);
-SERIAL_PROTOCOLPGM(" \n");
-SERIAL_PROTOCOLPGM(" MAX_PROBE_X:");
-SERIAL_PROTOCOL( MAX_PROBE_X);
-SERIAL_PROTOCOLPGM(" MIN_PROBE_EDGE:");
-SERIAL_PROTOCOL( MIN_PROBE_EDGE);
-SERIAL_PROTOCOLPGM(" \n");
         }
         if (front_out) {
           out_of_range_error(PSTR("(F)ront"));
@@ -2461,20 +2419,6 @@ SERIAL_PROTOCOLPGM(" \n");
         }
         if (back_out) {
           out_of_range_error(PSTR("(B)ack"));
-
-SERIAL_PROTOCOLPGM(" back_probe_bed_position:");
-SERIAL_PROTOCOL( back_probe_bed_position);
-SERIAL_PROTOCOLPGM(" \n");
-SERIAL_PROTOCOLPGM(" back_out_b:");
-SERIAL_PROTOCOL( back_out_b);
-SERIAL_PROTOCOLPGM(" \n");
-SERIAL_PROTOCOLPGM(" MIN_PROBE_Y:");
-SERIAL_PROTOCOL( MIN_PROBE_Y);
-SERIAL_PROTOCOLPGM(" \n");
-SERIAL_PROTOCOLPGM(" MAX_PROBE_Y:");
-SERIAL_PROTOCOL( MAX_PROBE_Y);
-SERIAL_PROTOCOLPGM(" \n");
-
           back_probe_bed_position = back_out_b ? MAX_PROBE_Y : front_probe_bed_position + MIN_PROBE_EDGE;
         }
         return;
@@ -2485,9 +2429,7 @@ SERIAL_PROTOCOLPGM(" \n");
     #if ENABLED(Z_PROBE_SLED)
       dock_sled(false); // engage (un-dock) the Z probe
     #elif ENABLED(Z_PROBE_ALLEN_KEY) //|| SERVO_LEVELING
-    #ifndef MANUAL_ALLEN_KEY_DEPLOYMENT
       deploy_z_probe();
-    #endif
     #endif
 
     st_synchronize();
@@ -2612,12 +2554,6 @@ SERIAL_PROTOCOLPGM(" \n");
             indexIntoAB[xCount][yCount] = probePointCounter;
           #else
             bed_level[xCount][yCount] = measured_z + z_offset;
-
-//SERIAL_PROTOCOLPGM("saving at: (");
-//SERIAL_PROTOCOL( xCount);
-//SERIAL_PROTOCOLPGM(",");
-//SERIAL_PROTOCOL( yCount);
-//SERIAL_PROTOCOLPGM(")\n");
           #endif
 
           probePointCounter++;
@@ -2636,10 +2572,8 @@ SERIAL_PROTOCOLPGM(" \n");
       clean_up_after_endstop_move();
 
       #if ENABLED(DELTA)
-	SERIAL_PROTOCOLPGM("Initial Bed Level Correction Matrix:\n");
+
         if (!dryrun) extrapolate_unprobed_bed_level();
-        print_bed_level();
-	SERIAL_PROTOCOLPGM("\nExtrapolated Correction Matrix:\n");
         print_bed_level();
 
       #else // !DELTA
@@ -2754,11 +2688,6 @@ SERIAL_PROTOCOLPGM(" \n");
     #endif // !AUTO_BED_LEVELING_GRID
 
     #if ENABLED(DELTA)
-        #ifdef MANUAL_ALLEN_KEY_DEPLOYMENT
-//        SERIAL_PROTOCOLPGM("doing blocking move()\n");
-//	do_blocking_move_to_xy( 0.0, 0.0);
- //       SERIAL_PROTOCOLPGM("done doing blocking move()\n");
-        #endif
       // Allen Key Probe for Delta
       #if ENABLED(Z_PROBE_ALLEN_KEY)
         stow_z_probe();
@@ -5244,6 +5173,12 @@ void process_next_command() {
         gcode_M45();
         break;
 
+      #if ENABLED(AUTO_BED_LEVELING_FEATURE) && ENABLED(Z_MIN_PROBE_REPEATABILITY_TEST)
+        case 48: // M48 Z probe repeatability
+          gcode_M48();
+          break;
+      #endif // AUTO_BED_LEVELING_FEATURE && Z_MIN_PROBE_REPEATABILITY_TEST
+
       #if ENABLED(M100_FREE_MEMORY_WATCHER)
         case 100:
           gcode_M100();
@@ -5697,26 +5632,6 @@ void clamp_to_software_endstops(float target[3]) {
   }
 
   void calculate_delta(float cartesian[3]) {
-
-float check1, check2, check3;	// Roxy Hack
-check1 = delta_diagonal_rod_2_tower_1 - sq(delta_tower1_x-cartesian[X_AXIS]) - sq(delta_tower1_y-cartesian[Y_AXIS]) ;
-if (check1<0.0)  {
-SERIAL_ECHOPGM("YIKES! 1 Negative # in sqrt(");
-SERIAL_ECHO(check1);
-SERIAL_ECHOPGM(")\n");
-}
-check2 = delta_diagonal_rod_2_tower_2 - sq(delta_tower2_x-cartesian[X_AXIS]) - sq(delta_tower2_y-cartesian[Y_AXIS]) ;
-if (check2<0.0)  {
-SERIAL_ECHOPGM("YIKES! 2 Negative # in sqrt(");
-SERIAL_ECHO(check2);
-SERIAL_ECHOPGM(")\n");
-}
-check3 = delta_diagonal_rod_2_tower_3 - sq(delta_tower3_x-cartesian[X_AXIS]) - sq(delta_tower3_y-cartesian[Y_AXIS]) ;
-if (check3<0.0)  {
-SERIAL_ECHOPGM("YIKES! 3 Negative # in sqrt(");
-SERIAL_ECHO(check3);
-SERIAL_ECHOPGM(")\n");
-}
 
     delta[TOWER_1] = sqrt(delta_diagonal_rod_2_tower_1
                           - sq(delta_tower1_x - cartesian[X_AXIS])

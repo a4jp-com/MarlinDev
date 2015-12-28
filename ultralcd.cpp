@@ -1,5 +1,7 @@
 #include "MarlinFirmware.h"
 #if ENABLED(ULTRA_LCD)
+//#include "Marlin.h"
+#include "ultralcd.h"
 #include "cardreader.h"
 #include "configuration_store.h"
 #include "display/display.h"
@@ -8,7 +10,6 @@
 #include "stepper.h"
 #include "temperature.h"
 #include "thermal/preheat.h"
-#include "ultralcd.h"
 #include "unit_conversion.h"
 
 int8_t encoderDiff; // updated from interrupt context and added to encoderPosition every LCD update
@@ -103,22 +104,27 @@ static void lcd_status_screen();
 
   #define ENCODER_FEEDRATE_DEADZONE 10
 
-  #if DISABLED(LCD_I2C_VIKI)
-    #ifndef ENCODER_STEPS_PER_MENU_ITEM
-      #define ENCODER_STEPS_PER_MENU_ITEM 5
-    #endif
-    #ifndef ENCODER_PULSES_PER_STEP
-      #define ENCODER_PULSES_PER_STEP 1
-    #endif
-  #else
+  #if ENABLED(LCD_I2C_VIKI)
     #ifndef ENCODER_STEPS_PER_MENU_ITEM
       #define ENCODER_STEPS_PER_MENU_ITEM 2 // VIKI LCD rotary encoder uses a different number of steps per rotation
     #endif
-    #ifndef ENCODER_PULSES_PER_STEP
-      #define ENCODER_PULSES_PER_STEP 1
-    #endif
+  #endif
+  #ifndef ENCODER_STEPS_PER_MENU_ITEM
+    #define ENCODER_STEPS_PER_MENU_ITEM 5
+  #endif
+  #ifndef ENCODER_PULSES_PER_STEP
+    #define ENCODER_PULSES_PER_STEP 1
   #endif
 
+  #ifndef BTN_ENC
+    #define BTN_ENC -1//81//-1
+  #endif
+  #ifndef BTN_EN1
+    #define BTN_EN1 -1//84//-1
+  #endif
+  #ifndef BTN_EN2
+    #define BTN_EN2 -1//85//-1
+  #endif
 
   /* Helper macros for menus */
 
@@ -500,10 +506,25 @@ void lcd_set_home_offsets() {
     void watch_temp_callback_E3() {}
   #endif // EXTRUDERS > 3
 #endif
+
 /**
- * Items shared between Tune and Temperature menus
+ *
+ * "Tune" submenu
+ *
  */
-static void nozzle_bed_fan_menu_items(uint8_t &encoderLine, uint8_t &_lineNr, uint8_t &_drawLineNr, uint8_t &_menuItemNr, bool &wasClicked, bool &itemSelected) {
+static void lcd_tune_menu() {
+  START_MENU();
+
+  //
+  // ^ Main
+  //
+  MENU_ITEM(back, MSG_MAIN, lcd_main_menu);
+
+  //
+  // Speed:
+  //
+  MENU_ITEM_EDIT(int3, MSG_SPEED, &feedrate_multiplier, 10, 999);
+
   //
   // Nozzle:
   // Nozzle [1-4]:
@@ -542,29 +563,6 @@ static void nozzle_bed_fan_menu_items(uint8_t &encoderLine, uint8_t &_lineNr, ui
   // Fan Speed:
   //
   MENU_MULTIPLIER_ITEM_EDIT(int3, MSG_FAN_SPEED, &fanSpeed, 0, 255);
-}
-
-
-/**
- *
- * "Tune" submenu
- *
- */
-static void lcd_tune_menu() {
-  START_MENU();
-
-  //
-  // ^ Main
-  //
-  MENU_ITEM(back, MSG_MAIN, lcd_main_menu);
-
-  //
-  // Speed:
-  //
-  MENU_ITEM_EDIT(int3, MSG_SPEED, &feedrate_multiplier, 10, 999);
-
-  // Nozzle, Bed, and Fan Control
-  nozzle_bed_fan_menu_items(encoderLine, _lineNr, _drawLineNr, _menuItemNr, wasClicked, itemSelected);
 
   //
   // Flow:
@@ -875,10 +873,10 @@ static void lcd_move_e(
         case 1: pos_label = PSTR(MSG_MOVE_E MSG_MOVE_E2); break;
         #if EXTRUDERS > 2
           case 2: pos_label = PSTR(MSG_MOVE_E MSG_MOVE_E3); break;
-          #if EXTRUDERS > 3
-            case 3: pos_label = PSTR(MSG_MOVE_E MSG_MOVE_E4); break;
-          #endif //EXTRUDERS > 3
         #endif //EXTRUDERS > 2
+        #if EXTRUDERS > 3
+          case 3: pos_label = PSTR(MSG_MOVE_E MSG_MOVE_E4); break;
+        #endif //EXTRUDERS > 3
       }
     #endif //EXTRUDERS > 1
     lcd_implementation_drawedit(pos_label, ftostr31(current_position[E_AXIS]));
@@ -892,13 +890,13 @@ static void lcd_move_e(
 #if EXTRUDERS > 1
   static void lcd_move_e0() { lcd_move_e(0); }
   static void lcd_move_e1() { lcd_move_e(1); }
-  #if EXTRUDERS > 2
-    static void lcd_move_e2() { lcd_move_e(2); }
-    #if EXTRUDERS > 3
-      static void lcd_move_e3() { lcd_move_e(3); }
-    #endif
-  #endif
 #endif // EXTRUDERS > 1
+#if EXTRUDERS > 2
+  static void lcd_move_e2() { lcd_move_e(2); }
+#endif
+#if EXTRUDERS > 3
+  static void lcd_move_e3() { lcd_move_e(3); }
+#endif
 
 /**
  *
@@ -918,13 +916,13 @@ static void lcd_move_menu_axis() {
     #else
       MENU_ITEM(submenu, MSG_MOVE_E MSG_MOVE_E1, lcd_move_e0);
       MENU_ITEM(submenu, MSG_MOVE_E MSG_MOVE_E2, lcd_move_e1);
-      #if EXTRUDERS > 2
-        MENU_ITEM(submenu, MSG_MOVE_E MSG_MOVE_E3, lcd_move_e2);
-        #if EXTRUDERS > 3
-          MENU_ITEM(submenu, MSG_MOVE_E MSG_MOVE_E4, lcd_move_e3);
-        #endif
-      #endif
-    #endif // EXTRUDERS > 1
+    #endif
+    #if EXTRUDERS > 2
+      MENU_ITEM(submenu, MSG_MOVE_E MSG_MOVE_E3, lcd_move_e2);
+    #endif
+    #if EXTRUDERS > 3
+      MENU_ITEM(submenu, MSG_MOVE_E MSG_MOVE_E4, lcd_move_e3);
+    #endif
   }
   END_MENU();
 }
@@ -1012,13 +1010,13 @@ static void lcd_control_menu() {
   #if ENABLED(PID_PARAMS_PER_EXTRUDER)
     #if EXTRUDERS > 1
       COPY_AND_SCALE(1);
-      #if EXTRUDERS > 2
-        COPY_AND_SCALE(2);
-        #if EXTRUDERS > 3
-          COPY_AND_SCALE(3);
-        #endif //EXTRUDERS > 3
-      #endif //EXTRUDERS > 2
     #endif //EXTRUDERS > 1
+    #if EXTRUDERS > 2
+      COPY_AND_SCALE(2);
+    #endif //EXTRUDERS > 2
+    #if EXTRUDERS > 3
+      COPY_AND_SCALE(3);
+    #endif //EXTRUDERS > 3
   #endif //PID_PARAMS_PER_EXTRUDER
 
 #endif //PIDTEMP
@@ -1036,8 +1034,44 @@ static void lcd_control_temperature_menu() {
   //
   MENU_ITEM(back, MSG_CONTROL, lcd_control_menu);
 
-  // Nozzle, Bed, and Fan Control
-  nozzle_bed_fan_menu_items(encoderLine, _lineNr, _drawLineNr, _menuItemNr, wasClicked, itemSelected);
+  //
+  // Nozzle:
+  // Nozzle [1-4]:
+  //
+  #if EXTRUDERS == 1
+    #if TEMP_SENSOR_0 != 0
+      MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(int3, MSG_NOZZLE, &target_temperature[0], 0, HEATER_0_MAXTEMP - 15, watch_temp_callback_E0);
+    #endif
+  #else //EXTRUDERS > 1
+    #if TEMP_SENSOR_0 != 0
+      MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(int3, MSG_NOZZLE MSG_N1, &target_temperature[0], 0, HEATER_0_MAXTEMP - 15, watch_temp_callback_E0);
+    #endif
+    #if TEMP_SENSOR_1 != 0
+      MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(int3, MSG_NOZZLE MSG_N2, &target_temperature[1], 0, HEATER_1_MAXTEMP - 15, watch_temp_callback_E1);
+    #endif
+  #endif // EXTRUDERS > 1
+  #if EXTRUDERS > 2
+    #if TEMP_SENSOR_2 != 0
+      MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(int3, MSG_NOZZLE MSG_N3, &target_temperature[2], 0, HEATER_2_MAXTEMP - 15, watch_temp_callback_E2);
+    #endif
+  #endif // EXTRUDERS > 2
+  #if EXTRUDERS > 3
+    #if TEMP_SENSOR_3 != 0
+      MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(int3, MSG_NOZZLE MSG_N4, &target_temperature[3], 0, HEATER_3_MAXTEMP - 15, watch_temp_callback_E3);
+    #endif
+  #endif // EXTRUDERS > 3
+
+  //
+  // Bed:
+  //
+  #if TEMP_SENSOR_BED != 0
+    MENU_MULTIPLIER_ITEM_EDIT(int3, MSG_BED, &target_temperature_bed, 0, BED_MAXTEMP - 15);
+  #endif
+
+  //
+  // Fan Speed:
+  //
+  MENU_MULTIPLIER_ITEM_EDIT(int3, MSG_FAN_SPEED, &fanSpeed, 0, 255);
 
   //
   // Autotemp, Min, Max, Fact
@@ -1078,10 +1112,10 @@ static void lcd_control_temperature_menu() {
       PID_MENU_ITEMS(MSG_E2, 1);
       #if EXTRUDERS > 2
         PID_MENU_ITEMS(MSG_E3, 2);
-        #if EXTRUDERS > 3
-          PID_MENU_ITEMS(MSG_E4, 3);
-        #endif //EXTRUDERS > 3
       #endif //EXTRUDERS > 2
+      #if EXTRUDERS > 3
+        PID_MENU_ITEMS(MSG_E4, 3);
+      #endif //EXTRUDERS > 3
     #else //!PID_PARAMS_PER_EXTRUDER || EXTRUDERS == 1
       PID_MENU_ITEMS("", 0);
     #endif //!PID_PARAMS_PER_EXTRUDER || EXTRUDERS == 1
@@ -1200,13 +1234,13 @@ static void lcd_control_volumetric_menu() {
     #else //EXTRUDERS > 1
       MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float43, MSG_FILAMENT_DIAM MSG_DIAM_E1, &filament_size[0], 1.5, 3.25, calculate_volumetric_multipliers);
       MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float43, MSG_FILAMENT_DIAM MSG_DIAM_E2, &filament_size[1], 1.5, 3.25, calculate_volumetric_multipliers);
-      #if EXTRUDERS > 2
-        MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float43, MSG_FILAMENT_DIAM MSG_DIAM_E3, &filament_size[2], 1.5, 3.25, calculate_volumetric_multipliers);
-        #if EXTRUDERS > 3
-          MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float43, MSG_FILAMENT_DIAM MSG_DIAM_E4, &filament_size[3], 1.5, 3.25, calculate_volumetric_multipliers);
-        #endif //EXTRUDERS > 3
-      #endif //EXTRUDERS > 2
     #endif //EXTRUDERS > 1
+    #if EXTRUDERS > 2
+      MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float43, MSG_FILAMENT_DIAM MSG_DIAM_E3, &filament_size[2], 1.5, 3.25, calculate_volumetric_multipliers);
+    #endif //EXTRUDERS > 2
+    #if EXTRUDERS > 3
+      MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(float43, MSG_FILAMENT_DIAM MSG_DIAM_E4, &filament_size[3], 1.5, 3.25, calculate_volumetric_multipliers);
+    #endif //EXTRUDERS > 3
   }
 
   END_MENU();
@@ -1499,15 +1533,49 @@ void lcd_init() {
   lcd_implementation_init();
 
   #if ENABLED(NEWPANEL)
+    #if BTN_EN1 > 0
+      SET_INPUT(BTN_EN1);
+      WRITE(BTN_EN1, HIGH);
+    #endif
 
-    SET_INPUT(BTN_EN1);
-    SET_INPUT(BTN_EN2);
-    WRITE(BTN_EN1, HIGH);
-    WRITE(BTN_EN2, HIGH);
+    #if BTN_EN2 > 0
+      SET_INPUT(BTN_EN2);
+      WRITE(BTN_EN2, HIGH);
+    #endif
 
     #if BTN_ENC > 0
       SET_INPUT(BTN_ENC);
       WRITE(BTN_ENC, HIGH);
+    #endif
+
+    #if BTN_HOME > 0
+      SET_INPUT(BTN_HOME);
+      WRITE(BTN_HOME, HIGH);
+    #endif
+
+    #if BTN_CENTER > 0
+      SET_INPUT(BTN_CENTER);
+      WRITE(BTN_CENTER, HIGH);
+    #endif
+
+    #if BTN_RIGHT > 0
+      SET_INPUT(BTN_RIGHT);
+      WRITE(BTN_RIGHT, HIGH);
+    #endif
+
+    #if BTN_LEFT > 0
+      SET_INPUT(BTN_LEFT);
+      WRITE(BTN_LEFT, HIGH);
+    #endif
+
+    #if BTN_UP > 0
+      SET_INPUT(BTN_UP);
+      WRITE(BTN_UP, HIGH);
+    #endif
+
+    #if BTN_DOWN > 0
+      SET_INPUT(BTN_DOWN);
+      WRITE(BTN_DOWN, HIGH);
     #endif
 
     #if ENABLED(REPRAPWORLD_KEYPAD)
@@ -1645,7 +1713,7 @@ void lcd_update() {
               int32_t encoderMovementSteps = abs(encoderDiff) / ENCODER_PULSES_PER_STEP;
 
               if (lastEncoderMovementMillis != 0) {
-                // Note that the rate is always calculated between to passes through the 
+                // Note that the rate is always calculated between to passes through the
                 // loop and that the abs of the encoderDiff value is tracked.
                 float encoderStepRate = (float)(encoderMovementSteps) / ((float)(ms - lastEncoderMovementMillis)) * 1000.0;
 
@@ -1818,16 +1886,13 @@ void lcd_reset_alert_level() { lcd_status_message_level = 0; }
   void lcd_buttons_update() {
     #if ENABLED(NEWPANEL)
       uint8_t newbutton = 0;
-	  #if BTN_EN1 > 0
+      #if BTN_EN1 > 0
         if (READ(BTN_EN1) == 0) newbutton |= EN_A;
       #endif
       #if BTN_EN2 > 0
         if (READ(BTN_EN2) == 0) newbutton |= EN_B;
       #endif
-	  
-	  
-      //#if ENABLED(RIGIDBOT_PANEL) || BTN_ENC > 0
-	  #if BTN_ENC > 0
+      #if ENABLED(RIGIDBOT_PANEL) || BTN_ENC > 0
         millis_t now = millis();
       #endif
       #if ENABLED(RIGIDBOT_PANEL)
@@ -1836,15 +1901,15 @@ void lcd_reset_alert_level() { lcd_status_message_level = 0; }
             encoderDiff = -1 * ENCODER_STEPS_PER_MENU_ITEM;
             next_button_update_ms = now + 300;
           }
-          else if (READ(BTN_DWN) == 0) {
+          else if (READ(BTN_DOWN) == 0) {
             encoderDiff = ENCODER_STEPS_PER_MENU_ITEM;
             next_button_update_ms = now + 300;
           }
-          else if (READ(BTN_LFT) == 0) {
+          else if (READ(BTN_LEFT) == 0) {
             encoderDiff = -1 * ENCODER_PULSES_PER_STEP;
             next_button_update_ms = now + 300;
           }
-          else if (READ(BTN_RT) == 0) {
+          else if (READ(BTN_RIGHT) == 0) {
             encoderDiff = ENCODER_PULSES_PER_STEP;
             next_button_update_ms = now + 300;
           }
