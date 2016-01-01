@@ -128,8 +128,8 @@
 #define BEEPER_PIN      -1
 
 #define BTN_HOME        80 //ext_16
-//#define BTN_CENTER      81 //ext_14
-#define BTN_ENC 81
+#define BTN_CENTER      81 //ext_14
+#define BTN_ENC         BTN_CENTER
 #define BTN_RIGHT       82 //ext_12
 #define BTN_LEFT        83 //ext_10
 #define BTN_UP          84 //ext2_8

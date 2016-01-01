@@ -117,13 +117,13 @@ static void lcd_status_screen();
   #endif
 
   #ifndef BTN_ENC
-    #define BTN_ENC -1//81//-1
+    #define BTN_ENC -1
   #endif
   #ifndef BTN_EN1
-    #define BTN_EN1 -1//84//-1
+    #define BTN_EN1 -1
   #endif
   #ifndef BTN_EN2
-    #define BTN_EN2 -1//85//-1
+    #define BTN_EN2 -1
   #endif
 
   /* Helper macros for menus */
@@ -1915,7 +1915,7 @@ void lcd_reset_alert_level() { lcd_status_message_level = 0; }
           }
         }
       #endif
-      #if BTN_ENC > 0
+	  #if BTN_ENC > 0
         if (now > next_button_update_ms && READ(BTN_ENC) == 0) newbutton |= EN_C;
       #endif
       buttons = newbutton;
