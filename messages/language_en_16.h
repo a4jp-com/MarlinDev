@@ -21,12 +21,12 @@
 #define MSG_AUTO_HOME                       "Auto home"
 #define MSG_SET_HOME_OFFSETS                "SetOffset home" //changed
 #define MSG_SET_ORIGIN                      "Set origin"
-#define MSG_PREHEAT_PLA                     "Preheat PLA"
+#define MSG_PREHEAT_PLA                     "Heat PLA" //changed
 #define MSG_PREHEAT_PLA_N                   MSG_PREHEAT_PLA " "
 #define MSG_PREHEAT_PLA_ALL                 MSG_PREHEAT_PLA " All"
 #define MSG_PREHEAT_PLA_BEDONLY             MSG_PREHEAT_PLA " Bed"
 #define MSG_PREHEAT_PLA_SETTINGS            MSG_PREHEAT_PLA " conf"
-#define MSG_PREHEAT_ABS                     "Preheat ABS"
+#define MSG_PREHEAT_ABS                     "Heat ABS" //changed
 #define MSG_PREHEAT_ABS_N                   MSG_PREHEAT_ABS " "
 #define MSG_PREHEAT_ABS_ALL                 MSG_PREHEAT_ABS " All"
 #define MSG_PREHEAT_ABS_BEDONLY             MSG_PREHEAT_ABS " Bed"
