@@ -128,7 +128,7 @@
 #endif
 
 
-#define XY_TRAVEL_SPEED 8000         // X and Y axis travel speed between probes, in mm/min.
+#define XY_TRAVEL_SPEED 600         // X and Y axis travel speed between probes, in mm/min.
 
 #define Z_RAISE_BEFORE_PROBING 100    // How much the Z axis will be raised before traveling to the first probing point.
 #ifndef Z_RAISE_BETWEEN_PROBINGS
@@ -148,7 +148,7 @@
 #define Z_PROBE_ALLEN_KEY_DEPLOY_1_Y 0.00
 #define Z_PROBE_ALLEN_KEY_DEPLOY_1_Z 100.0
 //define Z_PROBE_ALLEN_KEY_DEPLOY_1_FEEDRATE HOMING_FEEDRATE_XYZ
-#define Z_PROBE_ALLEN_KEY_DEPLOY_2_X -110.00 // Move outward to position deploy pin to the left of the arm
+#define Z_PROBE_ALLEN_KEY_DEPLOY_2_X -105.00 // Move outward to position deploy pin to the left of the arm
 #define Z_PROBE_ALLEN_KEY_DEPLOY_2_Y -125.00
 //#define Z_PROBE_ALLEN_KEY_DEPLOY_2_Z Z_PROBE_ALLEN_KEY_DEPLOY_1_Z
 #define Z_PROBE_ALLEN_KEY_DEPLOY_2_FEEDRATE HOMING_FEEDRATE_XYZ
@@ -157,13 +157,19 @@
 #define Z_PROBE_ALLEN_KEY_DEPLOY_3_Z Z_PROBE_ALLEN_KEY_DEPLOY_2_Z
 #define Z_PROBE_ALLEN_KEY_DEPLOY_3_FEEDRATE (HOMING_FEEDRATE_XYZ/2)
 
-#define Z_PROBE_ALLEN_KEY_STOW_1_X 36.00 // Line up with bed retaining clip
-#define Z_PROBE_ALLEN_KEY_STOW_1_Y -125.00
+#ifndef Z_PROBE_ALLEN_KEY_STOW_1_X
+  #define Z_PROBE_ALLEN_KEY_STOW_1_X 34.00 // Line up with bed retaining clip
+#endif
+#ifndef Z_PROBE_ALLEN_KEY_STOW_1_Y
+  #define Z_PROBE_ALLEN_KEY_STOW_1_Y -123.00
+#endif
 #define Z_PROBE_ALLEN_KEY_STOW_1_Z 75.0
 //#define Z_PROBE_ALLEN_KEY_STOW_1_FEEDRATE HOMING_FEEDRATE_XYZ
 //#define Z_PROBE_ALLEN_KEY_STOW_2_X Z_PROBE_ALLEN_KEY_STOW_1_X // move down to retract probe
 //#define Z_PROBE_ALLEN_KEY_STOW_2_Y Z_PROBE_ALLEN_KEY_STOW_1_Y
-#define Z_PROBE_ALLEN_KEY_STOW_2_Z 0.0
+#ifndef Z_PROBE_ALLEN_KEY_STOW_2_Z
+  #define Z_PROBE_ALLEN_KEY_STOW_2_Z 0.0
+#endif
 #define Z_PROBE_ALLEN_KEY_STOW_2_FEEDRATE (HOMING_FEEDRATE_XYZ/2)
 #define Z_PROBE_ALLEN_KEY_STOW_3_X 0.0  // return to 0,0,100
 #define Z_PROBE_ALLEN_KEY_STOW_3_Y 0.0
@@ -189,7 +195,7 @@
 
 // delta speeds must be the same on xyz
 #define DEFAULT_AXIS_STEPS_PER_UNIT   {XYZ_STEPS, XYZ_STEPS, XYZ_STEPS, 184.8}
-#define DEFAULT_MAX_FEEDRATE          {200, 200, 200, 200}    // (mm/sec)
+#define DEFAULT_MAX_FEEDRATE          {10, 10, 10, 200}    // (mm/sec)
 #define DEFAULT_MAX_ACCELERATION      {9000,9000,9000,9000}    // X, Y, Z, E maximum start speed for accelerated moves.
 
 // Custom M code points

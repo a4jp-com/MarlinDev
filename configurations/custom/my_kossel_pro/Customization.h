@@ -1,4 +1,4 @@
-#define  UUID "e9cbe275-aaee-4383-9352-01c1bac200ac"
+#define  UUID "1faef8a1-c6b3-40d1-bdaa-899c83dd9f65"
 
 #define  STRING_CONFIG_H_AUTHOR "(R Wackerbarth)" // Who made the changes.
 
@@ -21,3 +21,5 @@
 
 #define  VENDOR OpenBeam
 #define  MODEL KosselPro
+
+#define DEBUG_LEVELING_FEATURE

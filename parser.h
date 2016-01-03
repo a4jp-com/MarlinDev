@@ -1,5 +1,7 @@
 // parser.h
 
+const char axis_codes[NUM_AXIS] = {'X', 'Y', 'Z', 'E'};
+
 bool code_has_value();
 
 float code_value();

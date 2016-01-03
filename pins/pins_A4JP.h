@@ -134,3 +134,5 @@
 #define BTN_LEFT        83 //ext_10
 #define BTN_UP          84 //ext2_8
 #define BTN_DOWN        85 //ext2_6
+
+#define HOME_PIN        BTN_HOME

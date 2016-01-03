@@ -6,14 +6,24 @@ bool z_probe_is_active = false;
 #if ENABLED(USE_PROBE)
 
 #include "motion/motion.h"
+#include "movement.h"
 #include "debug_only_routines.h"
 #include "display/display.h"
 #include "unit_conversion.h"
 #include "thermal/heater_management.h"
 #include "host_interface/host_io.h"
+#include "planner.h"
 
 #if ENABLED(MANUAL_ALLEN_KEY_DEPLOYMENT)
   #include "display/panel.h"
+#endif
+
+#if HAS_SERVOS
+  #include "servo.h"
+#endif
+#if HAS_SERVO_ENDSTOPS
+  const int servo_endstop_id[] = SERVO_ENDSTOP_IDS;
+  const int servo_endstop_angle[][2] = SERVO_ENDSTOP_ANGLES;
 #endif
 
 #if ENABLED(AUTO_BED_LEVELING_FEATURE)
@@ -26,6 +36,20 @@ bool z_probe_is_active = false;
 #ifndef Y_PROBE_OFFSET_FROM_EXTRUDER
   #define Y_PROBE_OFFSET_FROM_EXTRUDER 0
 #endif
+
+#define DEFINE_PGM_READ_ANY(type, reader)       \
+  static inline type pgm_read_any(const type *p)  \
+  { return pgm_read_##reader##_near(p); }
+
+DEFINE_PGM_READ_ANY(float,       float);
+
+#define XYZ_CONSTS_FROM_CONFIG(type, array, CONFIG) \
+  static const PROGMEM type array##_P[3] =        \
+      { X_##CONFIG, Y_##CONFIG, Z_##CONFIG };     \
+  static inline type array(int axis)          \
+  { return pgm_read_any(&array##_P[axis]); }
+
+XYZ_CONSTS_FROM_CONFIG(float, home_bump_mm,   HOME_BUMP_MM);
 
 void deploy_z_probe() {
   bool z_probe_endstop;
@@ -59,6 +83,7 @@ void deploy_z_probe() {
         destination[Y_AXIS] = Z_PROBE_ALLEN_KEY_DEPLOY_1_Y;
         destination[Z_AXIS] = Z_PROBE_ALLEN_KEY_DEPLOY_1_Z;
         prepare_move_raw(); // this will also set_current_to_destination
+        st_synchronize();
 
         // Move to engage deployment
         if (Z_PROBE_ALLEN_KEY_DEPLOY_2_FEEDRATE != Z_PROBE_ALLEN_KEY_DEPLOY_1_FEEDRATE)
@@ -70,6 +95,7 @@ void deploy_z_probe() {
         if (Z_PROBE_ALLEN_KEY_DEPLOY_2_Z != Z_PROBE_ALLEN_KEY_DEPLOY_1_Z)
           destination[Z_AXIS] = Z_PROBE_ALLEN_KEY_DEPLOY_2_Z;
         prepare_move_raw();
+        st_synchronize();
 
         #ifdef Z_PROBE_ALLEN_KEY_DEPLOY_3_X
           if (Z_PROBE_ALLEN_KEY_DEPLOY_3_FEEDRATE != Z_PROBE_ALLEN_KEY_DEPLOY_2_FEEDRATE)
@@ -85,6 +111,7 @@ void deploy_z_probe() {
           if (Z_PROBE_ALLEN_KEY_DEPLOY_3_Z != Z_PROBE_ALLEN_KEY_DEPLOY_2_Z)
             destination[Z_AXIS] = Z_PROBE_ALLEN_KEY_DEPLOY_3_Z;
           prepare_move_raw();
+          st_synchronize();
         #endif
       }
 
@@ -374,6 +401,20 @@ float probe_pt(float x, float y, float z_before, ProbeAction probe_action, int v
 
   clean_up_after_endstop_move();
   return measured_z;
+}
+
+/**
+ * Some planner shorthand inline functions
+ */
+inline void set_homing_bump_feedrate(AxisEnum axis) {
+  const int homing_bump_divisor[] = HOMING_BUMP_DIVISOR;
+  int hbd = homing_bump_divisor[axis];
+  if (hbd < 1) {
+    hbd = 10;
+    SERIAL_ECHO_START;
+    SERIAL_ECHOLNPGM("Warning: Homing Bump Divisor < 1");
+  }
+  feedrate = homing_feedrate[axis] / hbd;
 }
 
 void run_z_probe() {

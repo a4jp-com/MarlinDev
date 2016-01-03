@@ -473,6 +473,8 @@ const bool Z_MIN_PROBE_ENDSTOP_INVERTING = false; // set to true to invert the l
    #define ULTRA_LCD
    #define NEWPANEL
    #define RIGIDBOT_PANEL
+   
+   #define DEBUG_LEVELING_FEATURE
 
 // Incrementing this by 1 will double the software PWM frequency,
 // affecting heaters, and the fan if FAN_SOFT_PWM is enabled.

@@ -167,7 +167,9 @@
   //#define Z_DUAL_ENDSTOPS
 
   #if ENABLED(Z_DUAL_ENDSTOPS)
-    #define Z2_MAX_PIN 36                     //Endstop used for Z2 axis. In this case I'm using XMAX in a Rumba Board (pin 36)
+    #ifndef Z2_MAX_PIN
+      #define Z2_MAX_PIN 36                     //Endstop used for Z2 axis. In this case I'm using XMAX in a Rumba Board (pin 36)
+    #endif
     const bool Z2_MAX_ENDSTOP_INVERTING = false;
     #define DISABLE_XMAX_ENDSTOP              //Better to disable the XMAX to avoid conflict. Just rename "XMAX_ENDSTOP" by the endstop you are using for Z2 axis.
   #endif
@@ -632,6 +634,5 @@ const unsigned int dropsegments = 5; //everything with less than this number of 
 #endif
 
 #include "Conditionals.h"
-#include "SanityCheck.h"
 
 #endif //CONFIGURATION_ADV_H
