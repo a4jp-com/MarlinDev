@@ -366,12 +366,12 @@ const bool Z_MIN_PROBE_ENDSTOP_INVERTING = false; // set to true to invert the l
 
 // default settings
 
-#define DEFAULT_AXIS_STEPS_PER_UNIT   {71.6942,71.7522,1066.67,97.3170}  // default steps per unit for Ultimaker 71.6942,71.7522,1066.67,97.3170
-#define DEFAULT_MAX_FEEDRATE          {500, 500, 5, 25}    // (mm/sec)
-#define DEFAULT_MAX_ACCELERATION      {1000,1000,500,10000}    // X, Y, Z, E (orinal values 9000,9000,500,10000) maximum start speed for accelerated moves. E default values are good for Skeinforge 40+, for older versions raise them a lot.
+#define DEFAULT_AXIS_STEPS_PER_UNIT   {71.65,71.65,1066.67,97.29}  // default steps 71.65,71.65,1066.67,97.5 per unit for Ultimaker 71.6942,71.7522,1066.67,97.3170
+#define DEFAULT_MAX_FEEDRATE          {500, 500, 8, 80}    // (mm/sec) 500, 500, 5, 25
+#define DEFAULT_MAX_ACCELERATION      {9000,9000,500,10000}    // X, Y, Z, E (orinal values 9000,9000,500,10000) maximum start speed for accelerated moves. E default values are good for Skeinforge 40+, for older versions raise them a lot.
 
 
-#define DEFAULT_ACCELERATION          1000    // X, Y, Z and E acceleration in mm/s^2 for printing moves
+#define DEFAULT_ACCELERATION          3000    // X, Y, Z and E acceleration in mm/s^2 for printing moves
 #define DEFAULT_RETRACT_ACCELERATION  3000    // E acceleration in mm/s^2 for retracts
 #define DEFAULT_TRAVEL_ACCELERATION   3000    // X, Y, Z acceleration in mm/s^2 for travel (non printing) moves
 
@@ -475,6 +475,7 @@ const bool Z_MIN_PROBE_ENDSTOP_INVERTING = false; // set to true to invert the l
    #define RIGIDBOT_PANEL
    
    #define DEBUG_LEVELING_FEATURE
+   #define ULTIPANEL_FEEDMULTIPLY //trying to get the feed rate value updating on the status screen after using "Tune> Flow rate" in the menu while printing
 
 // Incrementing this by 1 will double the software PWM frequency,
 // affecting heaters, and the fan if FAN_SOFT_PWM is enabled.
