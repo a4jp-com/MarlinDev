@@ -112,9 +112,9 @@ get rid of error but bad
 
   // If you are using a pre-configured hotend then you can use one of the value sets by uncommenting it
   // Ultimaker
-  #define  DEFAULT_Kp 22.2
-  #define  DEFAULT_Ki 1.08
-  #define  DEFAULT_Kd 114
+  #define  DEFAULT_Kp 18.13 //Original 22.2 - M303 E0 S200 C8 to run PID Autotune
+  #define  DEFAULT_Ki 1.04 //Original 1.08
+  #define  DEFAULT_Kd 78.87 //Original 114
 
   // MakerGear
   //#define  DEFAULT_Kp 7.0
@@ -158,9 +158,9 @@ get rid of error but bad
 
   //120v 250W silicone heater into 4mm borosilicate (MendelMax 1.5+)
   //from FOPDT model - kp=.39 Tp=405 Tdead=66, Tc set to 79.2, aggressive factor of .15 (vs .1, 1, 10)
-  #define  DEFAULT_bedKp 10.00
-  #define  DEFAULT_bedKi .023
-  #define  DEFAULT_bedKd 305.4
+  #define  DEFAULT_bedKp 171.02 //Original 10.00 - Autotune bed M303 E-1 S60 C8
+  #define  DEFAULT_bedKi 27.18 //Original .023
+  #define  DEFAULT_bedKd 268.99 //Original 305.4
 
   //120v 250W silicone heater into 4mm borosilicate (MendelMax 1.5+)
   //from pidautotune
@@ -201,6 +201,7 @@ get rid of error but bad
 
 #define THERMAL_PROTECTION_HOTENDS // Enable thermal protection for all extruders
 #define THERMAL_PROTECTION_BED     // Enable thermal protection for the heated bed
+
 
 //===========================================================================
 //============================= Mechanical Settings =========================
@@ -303,7 +304,7 @@ const bool Z_MIN_PROBE_ENDSTOP_INVERTING = false; // set to true to invert the l
 #define Y_MIN_POS 0
 #define Z_MIN_POS 0
 #define X_MAX_POS 200
-#define Y_MAX_POS 200
+#define Y_MAX_POS 192
 #define Z_MAX_POS 340
 
 //===========================================================================
@@ -366,9 +367,9 @@ const bool Z_MIN_PROBE_ENDSTOP_INVERTING = false; // set to true to invert the l
 
 // default settings
 
-#define DEFAULT_AXIS_STEPS_PER_UNIT   {71.65,71.65,1066.67,97.29}  // default steps 71.65,71.65,1066.67,97.5 per unit for Ultimaker 71.6942,71.7522,1066.67,97.3170
-#define DEFAULT_MAX_FEEDRATE          {500, 500, 8, 80}    // (mm/sec) 500, 500, 5, 25
-#define DEFAULT_MAX_ACCELERATION      {9000,9000,500,10000}    // X, Y, Z, E (orinal values 9000,9000,500,10000) maximum start speed for accelerated moves. E default values are good for Skeinforge 40+, for older versions raise them a lot.
+#define DEFAULT_AXIS_STEPS_PER_UNIT   {71.478,71.65,1070.44,97.29}  // default steps 71.65,71.65,int(200*16/3),97.5 per unit for Ultimaker 71.6942,71.7522,1066.67,97.3170 --z1066.65
+#define DEFAULT_MAX_FEEDRATE          {500, 500, 8, 50}    // (mm/sec) 500, 500, 5, 25
+#define DEFAULT_MAX_ACCELERATION      {8000,4500,500,10000}    // X, Y, Z, E (orinal values 9000,9000,500,10000) maximum start speed for accelerated moves. E default values are good for Skeinforge 40+, for older versions raise them a lot.
 
 
 #define DEFAULT_ACCELERATION          3000    // X, Y, Z and E acceleration in mm/s^2 for printing moves
@@ -376,7 +377,7 @@ const bool Z_MIN_PROBE_ENDSTOP_INVERTING = false; // set to true to invert the l
 #define DEFAULT_TRAVEL_ACCELERATION   3000    // X, Y, Z acceleration in mm/s^2 for travel (non printing) moves
 
 // The speed change that does not require acceleration (i.e. the software might assume it can be done instantaneously)
-#define DEFAULT_XYJERK                42.0    // (mm/sec) was 20 //faster to stop blobs
+#define DEFAULT_XYJERK                21.2    // (mm/sec) was 20 //higer value causes ringing 35-ringing - lower value causes blobs - 20.8-micro blobs
 #define DEFAULT_ZJERK                 0.4     // (mm/sec)
 #define DEFAULT_EJERK                 5.0    // (mm/sec)
 
@@ -476,6 +477,17 @@ const bool Z_MIN_PROBE_ENDSTOP_INVERTING = false; // set to true to invert the l
    
    #define DEBUG_LEVELING_FEATURE
    #define ULTIPANEL_FEEDMULTIPLY //trying to get the feed rate value updating on the status screen after using "Tune> Flow rate" in the menu while printing
+   
+/////////////////////////////
+// Motor Current setting (Only functional when motor current pins are connected to digipot)
+// Values 0-255
+// RAMBO 135 = ~0.75A, 185 = ~1A
+//////////////////////#define DIGIPOT_MOTOR_CURRENT
+//#define X_CURRENT 135
+///////////////////////#define Y_CURRENT 115
+//#define Z_CURRENT 135
+//#define E0_CURRENT 165 //For MakerGear M2, 165 is a good starting point (~1A)
+//#define E1_CURRENT 125
 
 // Incrementing this by 1 will double the software PWM frequency,
 // affecting heaters, and the fan if FAN_SOFT_PWM is enabled.
